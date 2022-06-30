@@ -36,6 +36,7 @@ import tensorflow.compat.v2 as tf
 import argparse
 import sys
 sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
 
 from bnn_hmc.utils import checkpoint_utils
 from bnn_hmc.utils import cmd_args_utils

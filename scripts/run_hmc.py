@@ -35,6 +35,7 @@ import jax
 from jax import numpy as jnp
 import sys
 sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
 
 from bnn_hmc.utils import checkpoint_utils  # pytype: disable=import-error
 from bnn_hmc.utils import cmd_args_utils  # pytype: disable=import-error
