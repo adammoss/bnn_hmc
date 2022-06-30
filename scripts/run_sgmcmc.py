@@ -32,7 +32,8 @@ import os
 from jax import numpy as jnp
 import jax
 import argparse
-from collections import OrderedDict
+import sys
+sys.path.append(os.getcwd())
 
 from bnn_hmc.core import sgmcmc
 from bnn_hmc.utils import checkpoint_utils
