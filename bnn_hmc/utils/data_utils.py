@@ -35,6 +35,7 @@ import numpy as onp
 from jax import numpy as jnp
 import tensorflow as tf
 import tensorflow_datasets as tfds
+import astro_datasets
 from enum import Enum
 import re
 import os
@@ -54,6 +55,7 @@ class ImgDatasets(Enum):
   CIFAR10 = "cifar10"
   CIFAR100 = "cifar100"
   MNIST = "mnist"
+  MIRABEST_CONFIDENT = "mirabest_confident"
 
 
 class UCIRegressionDatasets(Enum):
@@ -88,7 +90,8 @@ _UCI_REGRESSION_FILENAMES = {
 _ALL_IMG_DS_STATS = {
     ImgDatasets.CIFAR10: ((0.49, 0.48, 0.44), (0.2, 0.2, 0.2)),
     ImgDatasets.CIFAR100: ((0.49, 0.48, 0.44), (0.2, 0.2, 0.2)),
-    ImgDatasets.MNIST: ((0.1307,), (0.3081,))
+    ImgDatasets.MNIST: ((0.1307,), (0.3081,)),
+    ImgDatasets.MIRABEST_CONFIDENT: ((0.0,), (1.0,)),
 }
 
 _IMDB_CONFIG = {"max_features": 20000, "max_len": 100, "num_train": 20000}
