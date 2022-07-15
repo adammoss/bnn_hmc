@@ -76,6 +76,16 @@ def add_common_flags(parser):
       help="Size of the subset of train data to use; "
       "full dataset is used by default")
   parser.add_argument(
+      "--train_split",
+      type=str,
+      default="train",
+      help="Train split")
+  parser.add_argument(
+      "--test_split",
+      type=str,
+      default="test",
+      help="Test split")
+  parser.add_argument(
       "--model_name", type=str, default="lenet", help="Name of the dataset")
   parser.add_argument(
       "--use_float64",

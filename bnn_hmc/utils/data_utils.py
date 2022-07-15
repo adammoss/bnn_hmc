@@ -162,11 +162,11 @@ def load_image_dataset(split,
   return tfds.as_numpy(ds), num_classes, num_examples
 
 
-def get_image_dataset(name):
-  train_set, n_classes, _ = load_image_dataset("train", -1, name)
+def get_image_dataset(name, train_split="train", test_split="test"):
+  train_set, n_classes, _ = load_image_dataset(train_split, -1, name)
   train_set = next(iter(train_set))
 
-  test_set, _, _ = load_image_dataset("test", -1, name)
+  test_set, _, _ = load_image_dataset(test_split, -1, name)
   test_set = next(iter(test_set))
 
   data_info = {"num_classes": n_classes}
@@ -261,12 +261,12 @@ def pmap_dataset(ds, n_devices):
   return jax.pmap(lambda x: x)(batch_split_axis(ds, n_devices))
 
 
-def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None):
+def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_split="train", test_split="test"):
   """Make train and test sets sharded over batch dim."""
   name = name.lower()
   n_devices = n_devices or len(jax.local_devices())
   if name in ImgDatasets._value2member_map_:
-    train_set, test_set, data_info = get_image_dataset(name)
+    train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split)
     loaded = True
     task = Task.CLASSIFICATION
   elif name == "imdb":

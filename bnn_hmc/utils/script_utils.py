@@ -68,7 +68,8 @@ def get_dtype(args):
 def get_data_model_fns(args):
   dtype = get_dtype(args)
   train_set, test_set, task, data_info = data_utils.make_ds_pmap_fullbatch(
-      args.dataset_name, dtype, truncate_to=args.subset_train_to)
+      args.dataset_name, dtype, truncate_to=args.subset_train_to, train_split=args.train_split,
+      test_split=args.test_split)
 
   net_apply, net_init = models.get_model(args.model_name, data_info)
   net_apply = precision_utils.rewrite_high_precision(net_apply)
