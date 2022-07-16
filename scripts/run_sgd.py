@@ -100,8 +100,8 @@ def train_model():
     # Train
     best_iteration = 0
     best_nll = jnp.inf
-    save_model = False
     for iteration in range(start_iteration, args.num_epochs):
+        save_model = False
 
         (params, net_state, opt_state, logprob_avg, key), iteration_time = (
             sgd_train_epoch(params, net_state, opt_state, train_set, key))
