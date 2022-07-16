@@ -92,6 +92,11 @@ def add_common_flags(parser):
       dest="use_float64",
       action="store_true",
       help="Use float64 precision (does not work on TPUs)")
+  parser.add_argument(
+      "--patience",
+      type=int,
+      default=None,
+      help="Set to terminate training early; ")
 
 
 def add_sgd_flags(parser):
