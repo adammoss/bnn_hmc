@@ -86,11 +86,6 @@ def add_common_flags(parser):
       default="test",
       help="Test split")
   parser.add_argument(
-      "--test_split",
-      type=str,
-      default="test",
-      help="Test split")
-  parser.add_argument(
       "--eval_split",
       type=str,
       default=None,
