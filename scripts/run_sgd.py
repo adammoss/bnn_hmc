@@ -30,6 +30,7 @@
 
 import os
 from jax import numpy as jnp
+import numpy as onp
 import jax
 import argparse
 import sys
@@ -97,56 +98,66 @@ def train_model():
         train_utils.make_sgd_train_epoch(net_apply, log_likelihood_fn,
                                          log_prior_fn, optimizer, num_batches))
 
-    # Train
-    best_iteration = 0
-    best_nll = jnp.inf
-    for iteration in range(start_iteration, args.num_epochs):
-        save_model = False
+    if args.eval_split is None:
 
-        (params, net_state, opt_state, logprob_avg, key), iteration_time = (
-            sgd_train_epoch(params, net_state, opt_state, train_set, key))
+        # Train
+        best_iteration = 0
+        best_nll = jnp.inf
+        for iteration in range(start_iteration, args.num_epochs):
+            save_model = False
 
-        # Evaluate the model
-        train_stats, test_stats = {"log_prob": logprob_avg}, {}
-        if args.patience is not None or ((iteration % args.eval_freq == 0) or (iteration == args.num_epochs - 1)):
-            _, test_predictions, train_predictions, test_stats, train_stats_ = (
-                script_utils.evaluate(net_apply, params, net_state, train_set,
-                                      test_set, predict_fn, metrics_fns,
-                                      log_prior_fn))
-            train_stats.update(train_stats_)
-            if test_stats['nll'] < best_nll:
-                best_nll = test_stats['nll']
-                best_iteration = iteration
+            (params, net_state, opt_state, logprob_avg, key), iteration_time = (
+                sgd_train_epoch(params, net_state, opt_state, train_set, key))
+
+            # Evaluate the model
+            train_stats, test_stats = {"log_prob": logprob_avg}, {}
+            if args.patience is not None or ((iteration % args.eval_freq == 0) or (iteration == args.num_epochs - 1)):
+                _, test_predictions, train_predictions, test_stats, train_stats_ = (
+                    script_utils.evaluate(net_apply, params, net_state, train_set,
+                                          test_set, predict_fn, metrics_fns,
+                                          log_prior_fn))
+                train_stats.update(train_stats_)
+                if test_stats['nll'] < best_nll:
+                    best_nll = test_stats['nll']
+                    best_iteration = iteration
+                    save_model = True
+
+            if args.patience is not None and iteration > best_iteration + args.patience:
+                break
+
+            # Save checkpoint
+            if args.patience is None and (iteration % args.save_freq == 0 or iteration == args.num_epochs - 1):
                 save_model = True
 
-        if args.patience is not None and iteration > best_iteration + args.patience:
-            break
+            if save_model:
+                checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration)
+                checkpoint_path = os.path.join(dirname, checkpoint_name)
+                checkpoint_dict = checkpoint_utils.make_sgd_checkpoint_dict(
+                    iteration, params, net_state, opt_state, key)
+                checkpoint_utils.save_checkpoint(checkpoint_path, checkpoint_dict)
 
-        # Save checkpoint
-        if args.patience is None and (iteration % args.save_freq == 0 or iteration == args.num_epochs - 1):
-            save_model = True
+            # Log results
+            other_logs = script_utils.get_common_logs(iteration, iteration_time, args)
+            other_logs["hypers/step_size"] = lr_schedule(opt_state[-1].count)
+            other_logs["hypers/momentum"] = args.momentum_decay
+            logging_dict = logging_utils.make_logging_dict(train_stats, test_stats, {})
+            logging_dict.update(other_logs)
+            script_utils.write_to_tensorboard(tf_writer, logging_dict, iteration)
 
-        if save_model:
-            checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration)
-            checkpoint_path = os.path.join(dirname, checkpoint_name)
-            checkpoint_dict = checkpoint_utils.make_sgd_checkpoint_dict(
-                iteration, params, net_state, opt_state, key)
-            checkpoint_utils.save_checkpoint(checkpoint_path, checkpoint_dict)
+            tabulate_dict = script_utils.get_tabulate_dict(tabulate_metrics,
+                                                           logging_dict)
+            tabulate_dict["lr"] = lr_schedule(opt_state[-1].count)
+            table = logging_utils.make_table(tabulate_dict, iteration - start_iteration,
+                                             args.tabulate_freq)
+            print(table)
 
-        # Log results
-        other_logs = script_utils.get_common_logs(iteration, iteration_time, args)
-        other_logs["hypers/step_size"] = lr_schedule(opt_state[-1].count)
-        other_logs["hypers/momentum"] = args.momentum_decay
-        logging_dict = logging_utils.make_logging_dict(train_stats, test_stats, {})
-        logging_dict.update(other_logs)
-        script_utils.write_to_tensorboard(tf_writer, logging_dict, iteration)
+    else:
 
-        tabulate_dict = script_utils.get_tabulate_dict(tabulate_metrics,
-                                                       logging_dict)
-        tabulate_dict["lr"] = lr_schedule(opt_state[-1].count)
-        table = logging_utils.make_table(tabulate_dict, iteration - start_iteration,
-                                         args.tabulate_freq)
-        print(table)
+        net_state, test_predictions = onp.asarray(
+            predict_fn(net_apply, params, net_state, test_set))
+        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                                  metrics_fns)
+        print(test_stats)
 
 
 if __name__ == "__main__":
