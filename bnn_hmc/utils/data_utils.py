@@ -55,7 +55,7 @@ class ImgDatasets(Enum):
   CIFAR10 = "cifar10"
   CIFAR100 = "cifar100"
   MNIST = "mnist"
-  MIRABEST_CONFIDENT = "mirabest_confident"
+  MIRABEST_CONFIDENT = "mirabest/confident"
 
 
 class UCIRegressionDatasets(Enum):
