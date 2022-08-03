@@ -91,6 +91,11 @@ def add_common_flags(parser):
       default=None,
       help="Evaluation dataset")
   parser.add_argument(
+      "--scaling",
+      type=str,
+      default=None,
+      help="Scaling of dataset")
+  parser.add_argument(
       "--model_name", type=str, default="lenet", help="Name of the dataset")
   parser.add_argument(
       "--use_float64",

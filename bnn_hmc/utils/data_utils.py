@@ -55,8 +55,10 @@ class ImgDatasets(Enum):
   CIFAR10 = "cifar10"
   CIFAR100 = "cifar100"
   MNIST = "mnist"
+  MIRABEST_ALL = "mirabest/all"
   MIRABEST_CONFIDENT = "mirabest/confident"
-
+  MLSST_Y1 = "mlsst/Y1"
+  MLSST_Y10 = "mlsst/Y10"
 
 class UCIRegressionDatasets(Enum):
   BOSTON = "boston"
@@ -91,7 +93,10 @@ _ALL_IMG_DS_STATS = {
     ImgDatasets.CIFAR10: ((0.49, 0.48, 0.44), (0.2, 0.2, 0.2)),
     ImgDatasets.CIFAR100: ((0.49, 0.48, 0.44), (0.2, 0.2, 0.2)),
     ImgDatasets.MNIST: ((0.1307,), (0.3081,)),
+    ImgDatasets.MIRABEST_ALL: ((0.003089,), (0.03499,)),
     ImgDatasets.MIRABEST_CONFIDENT: ((0.003089,), (0.03499,)),
+    ImgDatasets.MLSST_Y1: ((0.0,), (1.0,)),
+    ImgDatasets.MLSST_Y10: ((0.0,), (1.0,)),
 }
 
 _IMDB_CONFIG = {"max_features": 20000, "max_len": 100, "num_train": 20000}
@@ -129,7 +134,8 @@ def load_image_dataset(split,
                        name="cifar10",
                        repeat=False,
                        shuffle=False,
-                       shuffle_seed=None):
+                       shuffle_seed=None,
+                       scaling=None):
   """Loads the dataset as a generator of batches."""
   # Do no data augmentation.
   ds, dataset_info = tfds.load(
@@ -137,6 +143,10 @@ def load_image_dataset(split,
   num_classes = dataset_info.features["label"].num_classes
   num_examples = dataset_info.splits[split].num_examples
   num_channels = dataset_info.features["image"].shape[-1]
+
+  def asinh(image, label):
+    image = tf.math.asinh(image)
+    return image, label
 
   def img_to_float32(image, label):
     return tf.image.convert_image_dtype(image, tf.float32), label
@@ -151,6 +161,8 @@ def load_image_dataset(split,
     image /= tf.constant(std, shape=[1, 1, num_channels], dtype=image.dtype)
     return image, label
 
+  if scaling == 'arcsin':
+    ds = ds.map(asinh)
   ds = ds.map(img_normalize)
   if batch_size == -1:
     batch_size = num_examples
@@ -162,11 +174,11 @@ def load_image_dataset(split,
   return tfds.as_numpy(ds), num_classes, num_examples
 
 
-def get_image_dataset(name, train_split="train", test_split="test"):
-  train_set, n_classes, _ = load_image_dataset(train_split, -1, name)
+def get_image_dataset(name, train_split="train", test_split="test", scaling=None):
+  train_set, n_classes, _ = load_image_dataset(train_split, -1, name, scaling=scaling)
   train_set = next(iter(train_set))
 
-  test_set, _, _ = load_image_dataset(test_split, -1, name)
+  test_set, _, _ = load_image_dataset(test_split, -1, name, scaling=scaling)
   test_set = next(iter(test_set))
 
   data_info = {"num_classes": n_classes}
@@ -261,12 +273,14 @@ def pmap_dataset(ds, n_devices):
   return jax.pmap(lambda x: x)(batch_split_axis(ds, n_devices))
 
 
-def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_split="train", test_split="test"):
+def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_split="train", test_split="test",
+                           scaling=None):
   """Make train and test sets sharded over batch dim."""
   name = name.lower()
   n_devices = n_devices or len(jax.local_devices())
   if name in ImgDatasets._value2member_map_:
-    train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split)
+    train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split,
+                                                       scaling=scaling)
     loaded = True
     task = Task.CLASSIFICATION
   elif name == "imdb":
