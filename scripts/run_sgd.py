@@ -158,6 +158,7 @@ def train_model():
         test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
                                                   metrics_fns)
         onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)
+        onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
         print(test_stats)
 
 
