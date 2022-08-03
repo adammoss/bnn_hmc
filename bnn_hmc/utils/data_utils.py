@@ -161,7 +161,7 @@ def load_image_dataset(split,
     image /= tf.constant(std, shape=[1, 1, num_channels], dtype=image.dtype)
     return image, label
 
-  if scaling == 'arcsin':
+  if scaling == 'asinh':
     ds = ds.map(asinh)
   ds = ds.map(img_normalize)
   if batch_size == -1:
