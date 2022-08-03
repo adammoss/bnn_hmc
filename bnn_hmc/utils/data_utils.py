@@ -95,8 +95,8 @@ _ALL_IMG_DS_STATS = {
     ImgDatasets.MNIST: ((0.1307,), (0.3081,)),
     ImgDatasets.MIRABEST_ALL: ((0.003089,), (0.03499,)),
     ImgDatasets.MIRABEST_CONFIDENT: ((0.003089,), (0.03499,)),
-    ImgDatasets.MLSST_Y1: ((0.0,), (1.0,)),
-    ImgDatasets.MLSST_Y10: ((0.0,), (1.0,)),
+    ImgDatasets.MLSST_Y1: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
+    ImgDatasets.MLSST_Y10: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
 }
 
 _IMDB_CONFIG = {"max_features": 20000, "max_len": 100, "num_train": 20000}
