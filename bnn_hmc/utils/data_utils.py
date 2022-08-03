@@ -276,7 +276,7 @@ def pmap_dataset(ds, n_devices):
 def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_split="train", test_split="test",
                            scaling=None):
   """Make train and test sets sharded over batch dim."""
-  name = name.lower()
+  #name = name.lower()
   n_devices = n_devices or len(jax.local_devices())
   if name in ImgDatasets._value2member_map_:
     train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split,
