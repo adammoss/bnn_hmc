@@ -246,7 +246,7 @@ def train_model():
             vi_ensemble_predict_fn(net_apply, params, net_state, test_set))
         ensemble_stats = train_utils.evaluate_metrics(ensemble_predictions,
                                                       test_set[1], metrics_fns)
-        onp.save(os.path.join(dirname, 'predictions.npy'), ensemble_predictions)
+        onp.save(os.path.join(dirname, 'predictions.npy'), all_preds)
         onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
         onp.save(os.path.join(dirname, 'metrics.npy'), ensemble_stats)
         print(ensemble_stats)
