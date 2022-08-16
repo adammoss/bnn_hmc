@@ -297,7 +297,6 @@ def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_
         loaded = True
         task = Task.CLASSIFICATION
     elif name in ImgRegDatasets._value2member_map_:
-        builder_kwargs = {'simulation': 'IllustrisTNG', 'field': 'Mtot', 'parameters': ['omegam']}
         train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split,
                                                            scaling=scaling, builder_kwargs=builder_kwargs)
         loaded = True
