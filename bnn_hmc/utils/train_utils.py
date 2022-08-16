@@ -73,7 +73,10 @@ def get_task_specific_fns(task, data_info):
     ensemble_fn = ensemble_utils.compute_updated_ensemble_predictions_regression
     predict_fn = get_regression_gaussian_predictions
 
-    data_scale = data_info["y_scale"]
+    if "y_scale" in data_info:
+        data_scale = data_info["y_scale"]
+    else:
+        data_scale = 1.0
     metrics_fns = {
         "scaled_nll": metrics.regression_nll,
         "scaled_mse": metrics.mse,

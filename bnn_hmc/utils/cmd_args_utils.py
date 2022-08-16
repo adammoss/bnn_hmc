@@ -107,6 +107,11 @@ def add_common_flags(parser):
       type=int,
       default=None,
       help="Set to terminate training early; ")
+  parser.add_argument(
+      "--builder_kwargs",
+      type=str,
+      default=None,
+      help="Optional dataset builder keyword arguments")
 
 
 def add_sgd_flags(parser):

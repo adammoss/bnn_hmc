@@ -35,6 +35,7 @@ import time
 import numpy as onp
 from jax import numpy as jnp
 import tensorflow.compat.v2 as tf
+import ast
 
 from collections import OrderedDict
 
@@ -67,14 +68,18 @@ def get_dtype(args):
 
 def get_data_model_fns(args):
     dtype = get_dtype(args)
+    if args.builder_kwargs is not None:
+        builder_kwargs = ast.literal_eval(args.builder_kwargs)
+    else:
+        builder_kwargs = {}
     if args.eval_split is None:
         train_set, test_set, task, data_info = data_utils.make_ds_pmap_fullbatch(
             args.dataset_name, dtype, truncate_to=args.subset_train_to, train_split=args.train_split,
-            test_split=args.test_split, scaling=args.scaling)
+            test_split=args.test_split, scaling=args.scaling, builder_kwargs=builder_kwargs)
     else:
         train_set, test_set, task, data_info = data_utils.make_ds_pmap_fullbatch(
             args.dataset_name, dtype, truncate_to=args.subset_train_to, train_split=args.train_split,
-            test_split=args.eval_split, scaling=args.scaling)
+            test_split=args.eval_split, scaling=args.scaling, builder_kwargs=builder_kwargs)
 
     net_apply, net_init = models.get_model(args.model_name, data_info)
     net_apply = precision_utils.rewrite_high_precision(net_apply)
