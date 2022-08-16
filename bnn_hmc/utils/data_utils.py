@@ -151,7 +151,7 @@ def load_image_dataset(split,
     if hasattr(dataset_info.features["label"], 'num_classes'):
         num_classes = dataset_info.features["label"].num_classes
     else:
-        num_classes = dataset_info.features["label"].shape[0]
+        num_classes = 2 * dataset_info.features["label"].shape[0]
     num_examples = dataset_info.splits[split].num_examples
     num_channels = dataset_info.features["image"].shape[-1]
 
