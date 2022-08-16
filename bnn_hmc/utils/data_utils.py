@@ -142,7 +142,8 @@ def load_image_dataset(split,
                        shuffle=False,
                        shuffle_seed=None,
                        scaling=None,
-                       builder_kwargs={}):
+                       builder_kwargs={},
+                       image_size=None):
     """Loads the dataset as a generator of batches."""
     # Do no data augmentation.
     ds, dataset_info = tfds.load(
@@ -167,6 +168,13 @@ def load_image_dataset(split,
     else:
         ds_stats = _ALL_IMG_DS_STATS[ImgRegDatasets(name)]
 
+    def resize(image, label, size):
+        image = tf.image.resize(image, size=[size, size])
+        return image, label
+
+    if image_size is not None:
+        ds = ds.map(lambda image, label: resize(image, label, image_size))
+
     def img_normalize(image, label):
         """Normalize the image to zero mean and unit variance."""
         mean, std = ds_stats
@@ -187,11 +195,13 @@ def load_image_dataset(split,
     return tfds.as_numpy(ds), num_classes, num_examples
 
 
-def get_image_dataset(name, train_split="train", test_split="test", scaling=None, builder_kwargs={}):
-    train_set, n_classes, _ = load_image_dataset(train_split, -1, name, scaling=scaling, builder_kwargs=builder_kwargs)
+def get_image_dataset(name, train_split="train", test_split="test", scaling=None, image_size=None, builder_kwargs={}):
+    train_set, n_classes, _ = load_image_dataset(train_split, -1, name, scaling=scaling, image_size=image_size,
+                                                 builder_kwargs=builder_kwargs)
     train_set = next(iter(train_set))
 
-    test_set, _, _ = load_image_dataset(test_split, -1, name, scaling=scaling, builder_kwargs=builder_kwargs)
+    test_set, _, _ = load_image_dataset(test_split, -1, name, scaling=scaling, image_size=image_size,
+                                        builder_kwargs=builder_kwargs)
     test_set = next(iter(test_set))
 
     data_info = {"num_classes": n_classes}
@@ -287,18 +297,20 @@ def pmap_dataset(ds, n_devices):
 
 
 def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_split="train", test_split="test",
-                           scaling=None, builder_kwargs={}):
+                           scaling=None, image_size=None, builder_kwargs={}):
     """Make train and test sets sharded over batch dim."""
     # name = name.lower()
     n_devices = n_devices or len(jax.local_devices())
     if name in ImgDatasets._value2member_map_:
         train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split,
-                                                           scaling=scaling, builder_kwargs=builder_kwargs)
+                                                           scaling=scaling, image_size=image_size,
+                                                           builder_kwargs=builder_kwargs)
         loaded = True
         task = Task.CLASSIFICATION
     elif name in ImgRegDatasets._value2member_map_:
         train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split,
-                                                           scaling=scaling, builder_kwargs=builder_kwargs)
+                                                           scaling=scaling, image_size=image_size,
+                                                           builder_kwargs=builder_kwargs)
         loaded = True
         task = Task.REGRESSION
     elif name == "imdb":

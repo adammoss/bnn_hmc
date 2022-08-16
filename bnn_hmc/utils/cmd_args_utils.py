@@ -112,6 +112,11 @@ def add_common_flags(parser):
       type=str,
       default=None,
       help="Optional dataset builder keyword arguments")
+  parser.add_argument(
+      "--image_resize",
+      type=int,
+      default=None,
+      help="Optional image resize")
 
 
 def add_sgd_flags(parser):
