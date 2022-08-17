@@ -70,6 +70,8 @@ def get_data_model_fns(args):
     dtype = get_dtype(args)
     if args.builder_kwargs is not None:
         builder_kwargs = ast.literal_eval(args.builder_kwargs)
+        if isinstance(builder_kwargs, str):
+            builder_kwargs = ast.literal_eval(builder_kwargs)
     else:
         builder_kwargs = {}
     if args.eval_split is None:
