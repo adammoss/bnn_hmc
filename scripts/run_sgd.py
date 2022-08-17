@@ -51,9 +51,13 @@ cmd_args_utils.add_sgd_flags(parser)
 parser.add_argument(
     "--optimizer",
     type=str,
-    default="Adam",
+    default="SGD",
     choices=["SGD", "Adam"],
     help="Choice of optimizer; (SGD or Adam; default: SGD)")
+parser.add_argument(
+    "--no_seed_dir",
+    action="store_true",
+    help="DO not use seed in directory")
 
 args = parser.parse_args()
 train_utils.set_up_jax(args.tpu_ip, args.use_float64)
@@ -69,7 +73,7 @@ def get_optimizer(lr_schedule, args):
 
 
 def get_dirname_tfwriter(args):
-    method_name = ""
+    method_name = "sgd"
     if args.optimizer == "SGD":
         optimizer_name = "opt_sgd_{}".format(args.momentum_decay)
     elif args.optimizer == "Adam":
@@ -77,9 +81,13 @@ def get_dirname_tfwriter(args):
     lr_schedule_name = "lr_sch_i_{}".format(args.init_step_size)
     hypers_name = "_epochs_{}_wd_{}_batchsize_{}_temp_{}".format(
         args.num_epochs, args.weight_decay, args.batch_size, args.temperature)
-    subdirname = "{}__{}__{}__{}__seed_{}".format(method_name, optimizer_name,
-                                                  lr_schedule_name, hypers_name,
-                                                  args.seed)
+    if not args.no_seed_dir:
+        subdirname = "{}__{}__{}__{}__seed_{}".format(method_name, optimizer_name,
+                                                      lr_schedule_name, hypers_name,
+                                                      args.seed)
+    else:
+        subdirname = "{}__{}__{}__{}".format(method_name, optimizer_name,
+                                             lr_schedule_name, hypers_name)
     dirname, tf_writer = script_utils.prepare_logging(subdirname, args)
     return dirname, tf_writer
 
@@ -105,6 +113,7 @@ def train_model():
     opt_state = optimizer.init(params)
     net_state = jax.pmap(lambda _: net_state)(jnp.arange(num_devices))
     key = jax.random.split(key, num_devices)
+
     init_dict = checkpoint_utils.make_sgd_checkpoint_dict(-1, params, net_state,
                                                           opt_state, key)
     init_dict = script_utils.get_initialization_dict(dirname, args, init_dict)
@@ -134,7 +143,7 @@ def train_model():
                 _, test_predictions, train_predictions, test_stats, train_stats_ = (
                     script_utils.evaluate(net_apply, params, net_state, train_set,
                                           test_set, predict_fn, metrics_fns,
-                                          log_prior_fn))
+                                          log_prior_fn, None))
                 train_stats.update(train_stats_)
                 if test_stats['nll'] < best_nll:
                     best_nll = test_stats['nll']
@@ -172,13 +181,19 @@ def train_model():
 
     else:
 
-        net_state, test_predictions = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set))
+        net_state, test_predictions, key = onp.asarray(
+            predict_fn(net_apply, params, net_state, test_set, key))
         test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
                                                   metrics_fns)
         onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)
         onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
         onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
+        print(test_stats)
+
+        net_state, test_predictions, key = onp.asarray(
+            predict_fn(net_apply, params, net_state, test_set, key))
+        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                                  metrics_fns)
         print(test_stats)
 
 

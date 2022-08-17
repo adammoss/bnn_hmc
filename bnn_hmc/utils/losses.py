@@ -37,10 +37,11 @@ from bnn_hmc.utils import tree_utils
 
 def make_xent_log_likelihood(temperature):
 
-  def xent_log_likelihood(net_apply, params, net_state, batch, is_training):
+  def xent_log_likelihood(net_apply, params, net_state, batch, is_training, key):
     """Computes the negative log-likelihood."""
     _, y = batch
-    logits, net_state = net_apply(params, net_state, None, batch, is_training)
+    #key, net_init_key = jax.random.split(jax.random.PRNGKey(42), 2)
+    logits, net_state = net_apply(params, net_state, key, batch, is_training)
     num_classes = logits.shape[-1]
     labels = jax.nn.one_hot(y, num_classes)
     softmax_xent = jnp.sum(labels * jax.nn.log_softmax(logits)) / temperature
