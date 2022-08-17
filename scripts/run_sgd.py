@@ -51,7 +51,7 @@ cmd_args_utils.add_sgd_flags(parser)
 parser.add_argument(
     "--optimizer",
     type=str,
-    default="Adam",
+    default="SGD",
     choices=["SGD", "Adam"],
     help="Choice of optimizer; (SGD or Adam; default: SGD)")
 
