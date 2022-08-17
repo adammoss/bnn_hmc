@@ -69,7 +69,7 @@ def get_optimizer(lr_schedule, args):
 
 
 def get_dirname_tfwriter(args):
-    method_name = ""
+    method_name = "sgd"
     if args.optimizer == "SGD":
         optimizer_name = "opt_sgd_{}".format(args.momentum_decay)
     elif args.optimizer == "Adam":
