@@ -48,18 +48,38 @@ from bnn_hmc.utils import script_utils
 parser = argparse.ArgumentParser(description="Run SGD on a cloud TPU")
 cmd_args_utils.add_common_flags(parser)
 cmd_args_utils.add_sgd_flags(parser)
+parser.add_argument(
+    "--optimizer",
+    type=str,
+    default="Adam",
+    choices=["SGD", "Adam"],
+    help="Choice of optimizer; (SGD or Adam; default: SGD)")
 
 args = parser.parse_args()
 train_utils.set_up_jax(args.tpu_ip, args.use_float64)
 
 
+def get_optimizer(lr_schedule, args):
+    if args.optimizer == "SGD":
+        optimizer = optim_utils.make_sgd_optimizer(
+            lr_schedule, momentum_decay=args.momentum_decay)
+    elif args.optimizer == "Adam":
+        optimizer = optim_utils.make_adam_optimizer(lr_schedule)
+    return optimizer
+
+
 def get_dirname_tfwriter(args):
-    method_name = "sgd_mom_{}".format(args.momentum_decay)
+    method_name = ""
+    if args.optimizer == "SGD":
+        optimizer_name = "opt_sgd_{}".format(args.momentum_decay)
+    elif args.optimizer == "Adam":
+        optimizer_name = "opt_adam"
     lr_schedule_name = "lr_sch_i_{}".format(args.init_step_size)
     hypers_name = "_epochs_{}_wd_{}_batchsize_{}_temp_{}".format(
         args.num_epochs, args.weight_decay, args.batch_size, args.temperature)
-    subdirname = "{}__{}__{}__seed_{}".format(method_name, lr_schedule_name,
-                                              hypers_name, args.seed)
+    subdirname = "{}__{}__{}__{}__seed_{}".format(method_name, optimizer_name,
+                                                  lr_schedule_name, hypers_name,
+                                                  args.seed)
     dirname, tf_writer = script_utils.prepare_logging(subdirname, args)
     return dirname, tf_writer
 
@@ -79,8 +99,7 @@ def train_model():
     num_devices = len(jax.devices())
     lr_schedule = optim_utils.make_cosine_lr_schedule(args.init_step_size,
                                                       total_steps)
-    optimizer = optim_utils.make_sgd_optimizer(
-        lr_schedule, momentum_decay=args.momentum_decay)
+    optimizer = get_optimizer(lr_schedule, args)
 
     # Initialize variables
     opt_state = optimizer.init(params)

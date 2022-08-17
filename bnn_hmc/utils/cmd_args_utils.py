@@ -106,7 +106,7 @@ def add_common_flags(parser):
       "--patience",
       type=int,
       default=None,
-      help="Set to terminate training early; ")
+      help="Set to terminate training early")
   parser.add_argument(
       "--builder_kwargs",
       type=str,
