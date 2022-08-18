@@ -70,6 +70,37 @@ def make_lenet5_fn(data_info):
   return lenet_fn
 
 
+def make_lenet5_dropout_fn(data_info, dropout_rate=0.1):
+  num_classes = data_info["num_classes"]
+  #rng = hk.PRNGSequence(42)
+
+  def lenet_fn(batch, is_training):
+    """Network inspired by LeNet-5."""
+    x, _ = batch
+    x = hk.Conv2D(output_channels=6, kernel_shape=5, padding="SAME")(x)
+    x = jax.nn.relu(x)
+    x = hk.MaxPool(window_shape=3, strides=2, padding="VALID")(x)
+    #x = hk.dropout(next(rng), rate=dropout_rate, x=x)
+    x = hk.dropout(hk.next_rng_key(), rate=dropout_rate, x=x)
+    x = hk.Conv2D(output_channels=16, kernel_shape=5, padding="SAME")(x)
+    x = jax.nn.relu(x)
+    x = hk.MaxPool(window_shape=3, strides=2, padding="VALID")(x)
+    #x = hk.dropout(next(rng), rate=dropout_rate, x=x)
+    x = hk.Conv2D(output_channels=120, kernel_shape=5, padding="SAME")(x)
+    x = jax.nn.relu(x)
+    x = hk.MaxPool(window_shape=3, strides=2, padding="VALID")(x)
+    #x = hk.dropout(next(rng), rate=dropout_rate, x=x)
+    x = hk.Flatten()(x)
+    x = hk.Linear(84)(x)
+    x = jax.nn.relu(x)
+    #x = hk.dropout(next(rng), rate=dropout_rate, x=x)
+    x = hk.Linear(num_classes)(x)
+    return x
+
+  return lenet_fn
+
+
+
 he_normal = hk.initializers.VarianceScaling(2.0, "fan_in", "truncated_normal")
 
 
@@ -294,6 +325,8 @@ def get_model(model_name, data_info, **kwargs):
   _MODEL_FNS = {
       "lenet":
           make_lenet5_fn,
+      "lenet_dropout":
+          functools.partial(make_lenet5_dropout_fn, dropout_rate=0.1),
       "resnet20":
           make_resnet20_fn,
       "resnet20_frn":
@@ -315,4 +348,5 @@ def get_model(model_name, data_info, **kwargs):
   }
   net_fn = _MODEL_FNS[model_name](data_info, **kwargs)
   net = hk.transform_with_state(net_fn)
+  #net = hk.without_apply_rng(net)
   return net.apply, net.init
