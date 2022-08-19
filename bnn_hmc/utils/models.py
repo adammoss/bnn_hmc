@@ -70,6 +70,13 @@ def make_lenet5_fn(data_info):
   return lenet_fn
 
 
+def maybe_hk_dropout(rate, value):
+    key = hk.maybe_next_rng_key()
+    if key is not None:
+        value = hk.dropout(key, rate, value)
+    return value
+
+
 def make_lenet5_dropout_fn(data_info, dropout_rate=0.1):
   num_classes = data_info["num_classes"]
   #rng = hk.PRNGSequence(42)
@@ -81,7 +88,8 @@ def make_lenet5_dropout_fn(data_info, dropout_rate=0.1):
     x = jax.nn.relu(x)
     x = hk.MaxPool(window_shape=3, strides=2, padding="VALID")(x)
     #x = hk.dropout(next(rng), rate=dropout_rate, x=x)
-    x = hk.dropout(hk.next_rng_key(), rate=dropout_rate, x=x)
+    x = maybe_hk_dropout(dropout_rate, x)
+    #x = hk.dropout(hk.next_rng_key(), rate=dropout_rate, x=x)
     x = hk.Conv2D(output_channels=16, kernel_shape=5, padding="SAME")(x)
     x = jax.nn.relu(x)
     x = hk.MaxPool(window_shape=3, strides=2, padding="VALID")(x)
