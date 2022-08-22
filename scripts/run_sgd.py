@@ -181,6 +181,10 @@ def train_model():
 
     else:
 
+        print(key)
+        key, = jax.random.split(key, 1)
+
+
         net_state, test_predictions = onp.asarray(
             predict_fn(net_apply, params, net_state, test_set, key))
         test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
