@@ -134,7 +134,7 @@ def train_model():
                 _, test_predictions, train_predictions, test_stats, train_stats_ = (
                     script_utils.evaluate(net_apply, params, net_state, train_set,
                                           test_set, predict_fn, metrics_fns,
-                                          log_prior_fn))
+                                          log_prior_fn, key))
                 train_stats.update(train_stats_)
                 if test_stats['nll'] < best_nll:
                     best_nll = test_stats['nll']
@@ -173,7 +173,7 @@ def train_model():
     else:
 
         net_state, test_predictions = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set))
+            predict_fn(net_apply, params, net_state, test_set, key))
         test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
                                                   metrics_fns)
         onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)

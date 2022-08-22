@@ -147,11 +147,11 @@ def get_initialization_dict(dirname, args, init_dict):
 
 
 def evaluate(net_apply, params, net_state, train_set, test_set, predict_fn,
-             metrics_fns, log_prior_fn):
+             metrics_fns, log_prior_fn, key):
     net_state, test_predictions = onp.asarray(
-        predict_fn(net_apply, params, net_state, test_set))
+        predict_fn(net_apply, params, net_state, test_set, key))
     net_state, train_predictions = onp.asarray(
-        predict_fn(net_apply, params, net_state, train_set))
+        predict_fn(net_apply, params, net_state, train_set, key))
     test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
                                               metrics_fns)
     train_stats = train_utils.evaluate_metrics(train_predictions, train_set[1],
