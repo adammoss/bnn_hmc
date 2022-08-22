@@ -55,8 +55,8 @@ parser.add_argument(
     choices=["SGD", "Adam"],
     help="Choice of optimizer; (SGD or Adam; default: SGD)")
 parser.add_argument(
-    "--seed_dir",
-    action="store_false",
+    "--no_seed_dir",
+    action="store_true",
     help="DO not use seed in directory")
 
 args = parser.parse_args()
@@ -81,7 +81,8 @@ def get_dirname_tfwriter(args):
     lr_schedule_name = "lr_sch_i_{}".format(args.init_step_size)
     hypers_name = "_epochs_{}_wd_{}_batchsize_{}_temp_{}".format(
         args.num_epochs, args.weight_decay, args.batch_size, args.temperature)
-    if args.seed_dir:
+    print(args.no_seed_dir)
+    if not args.no_seed_dir:
         subdirname = "{}__{}__{}__{}__seed_{}".format(method_name, optimizer_name,
                                                       lr_schedule_name, hypers_name,
                                                       args.seed)
