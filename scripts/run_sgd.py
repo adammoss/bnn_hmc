@@ -190,6 +190,12 @@ def train_model():
         onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
         print(test_stats)
 
+        net_state, test_predictions = onp.asarray(
+            predict_fn(net_apply, params, net_state, test_set, key))
+        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                                  metrics_fns)
+        print(test_stats)
+
 
 if __name__ == "__main__":
     script_utils.print_visible_devices()
