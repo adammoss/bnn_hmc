@@ -81,7 +81,6 @@ def get_dirname_tfwriter(args):
     lr_schedule_name = "lr_sch_i_{}".format(args.init_step_size)
     hypers_name = "_epochs_{}_wd_{}_batchsize_{}_temp_{}".format(
         args.num_epochs, args.weight_decay, args.batch_size, args.temperature)
-    print(args.no_seed_dir)
     if not args.no_seed_dir:
         subdirname = "{}__{}__{}__{}__seed_{}".format(method_name, optimizer_name,
                                                       lr_schedule_name, hypers_name,
@@ -102,6 +101,10 @@ def train_model():
      log_prior_fn, _, predict_fn, ensemble_upd_fn, metrics_fns,
      tabulate_metrics) = script_utils.get_data_model_fns(args)
 
+    print(key)
+    key, = jax.random.split(key, 1)
+    print(key)
+
     # Initialize step-size schedule and optimizer
     num_batches, total_steps = script_utils.get_num_batches_total_steps(
         args, train_set)
@@ -114,6 +117,12 @@ def train_model():
     opt_state = optimizer.init(params)
     net_state = jax.pmap(lambda _: net_state)(jnp.arange(num_devices))
     key = jax.random.split(key, num_devices)
+
+    print(key)
+    print(num_devices)
+    #key, = jax.random.split(key, 1)
+    #print(key)
+
     init_dict = checkpoint_utils.make_sgd_checkpoint_dict(-1, params, net_state,
                                                           opt_state, key)
     init_dict = script_utils.get_initialization_dict(dirname, args, init_dict)
@@ -136,6 +145,11 @@ def train_model():
 
             (params, net_state, opt_state, logprob_avg, key), iteration_time = (
                 sgd_train_epoch(params, net_state, opt_state, train_set, key))
+
+            print(key)
+            #key, = jax.random.split(key, 1)
+            #print(key)
+            #stop
 
             # Evaluate the model
             train_stats, test_stats = {"log_prob": logprob_avg}, {}
@@ -182,6 +196,7 @@ def train_model():
     else:
 
         print('hello', key)
+        print()
         key, = jax.random.split(key, 1)
 
 

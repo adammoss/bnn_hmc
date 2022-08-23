@@ -244,6 +244,7 @@ def make_sgd_train_epoch(net_apply, log_likelihood_fn, log_prior_fn, optimizer,
         def train_step(carry, batch_indices):
             batch = jax.tree_map(lambda x: x[batch_indices], train_set)
             params_, net_state_, opt_state_, key_ = carry
+            print('nnn', key_)
             loss, grad, net_state_ = _perdevice_log_prob_and_grad(
                 batch, params_, net_state_, key_)
             grad = jax.lax.psum(grad, axis_name="i")
@@ -256,12 +257,21 @@ def make_sgd_train_epoch(net_apply, log_likelihood_fn, log_prior_fn, optimizer,
          opt_state, key), losses = jax.lax.scan(train_step,
                                                 (params, net_state, opt_state, key), indices)
 
+        print('hello a', key)
+        #stop
         new_key, = jax.random.split(key, 1)
+        print('hello b', key)
         return losses, params, net_state, opt_state, new_key
 
     def sgd_train_epoch(params, net_state, opt_state, train_set, key):
+        print(key)
+        #key, = jax.random.split(key, 1)
+        #print(key)
+        #stop
+
         losses, params, net_state, opt_state, new_key = (
             pmap_sgd_train_epoch(params, net_state, opt_state, train_set, key))
+        print(new_key)
         params, opt_state = map(tree_utils.get_first_elem_in_sharded_tree,
                                 [params, opt_state])
         loss_avg = jnp.mean(losses)
@@ -287,14 +297,24 @@ def make_get_predictions(activation_fn, num_batches=1, is_training=False):
         dataset = jax.tree_map(
             lambda x: x.reshape((num_batches, batch_size, *x.shape[1:])), dataset)
 
-        def get_batch_predictions(current_net_state, x):
-            y, current_net_state = net_apply(params, current_net_state, key, x,
+        #def get_batch_predictions(current_net_state, x):
+        #    y, current_net_state = net_apply(params, current_net_state, key, x,
+        #                                     is_training)
+        #    batch_predictions = activation_fn(y)
+        #    return current_net_state, batch_predictions
+
+        #net_state, predictions = jax.lax.scan(get_batch_predictions, net_state,
+        #
+
+        def get_batch_predictions(carry, x):
+            current_net_state_, key_ = carry
+            y, current_net_state_ = net_apply(params, current_net_state_, key_, x,
                                              is_training)
             batch_predictions = activation_fn(y)
-            return current_net_state, batch_predictions
+            return (current_net_state_, key_), batch_predictions
 
-        net_state, predictions = jax.lax.scan(get_batch_predictions, net_state,
-                                              dataset)
+        (net_state, key), predictions = jax.lax.scan(get_batch_predictions,
+                                                     (net_state, key), dataset)
         predictions = predictions.reshape(
             (num_batches * batch_size, *predictions.shape[2:]))
         return net_state, predictions
