@@ -55,9 +55,10 @@ parser.add_argument(
     choices=["SGD", "Adam"],
     help="Choice of optimizer; (SGD or Adam; default: SGD)")
 parser.add_argument(
-    "--no_seed_dir",
-    action="store_true",
-    help="DO not use seed in directory")
+    "--repeats",
+    type=int,
+    default=1,
+    help="MC dropout repeats")
 
 args = parser.parse_args()
 train_utils.set_up_jax(args.tpu_ip, args.use_float64)
@@ -81,13 +82,8 @@ def get_dirname_tfwriter(args):
     lr_schedule_name = "lr_sch_i_{}".format(args.init_step_size)
     hypers_name = "_epochs_{}_wd_{}_batchsize_{}_temp_{}".format(
         args.num_epochs, args.weight_decay, args.batch_size, args.temperature)
-    if not args.no_seed_dir:
-        subdirname = "{}__{}__{}__{}__seed_{}".format(method_name, optimizer_name,
-                                                      lr_schedule_name, hypers_name,
-                                                      args.seed)
-    else:
-        subdirname = "{}__{}__{}__{}".format(method_name, optimizer_name,
-                                             lr_schedule_name, hypers_name)
+    subdirname = "{}__{}__{}__{}".format(method_name, optimizer_name,
+                                         lr_schedule_name, hypers_name)
     dirname, tf_writer = script_utils.prepare_logging(subdirname, args)
     return dirname, tf_writer
 
@@ -181,20 +177,16 @@ def train_model():
 
     else:
 
-        net_state, test_predictions, key = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set, key))
-        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-                                                  metrics_fns)
-        onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)
-        onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
-        onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
-        print(test_stats)
+        for i in range(args.repeats):
 
-        net_state, test_predictions, key = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set, key))
-        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-                                                  metrics_fns)
-        print(test_stats)
+            net_state, test_predictions, key = onp.asarray(
+                predict_fn(net_apply, params, net_state, test_set, key))
+            test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                                      metrics_fns)
+            onp.save(os.path.join(dirname, '%s/predictions.npy' % i), test_predictions)
+            onp.save(os.path.join(dirname, '%s/test_set.npy' % i), test_set[1])
+            onp.save(os.path.join(dirname, '%s/metrics.npy' % i), test_stats)
+            print(test_stats)
 
 
 if __name__ == "__main__":
