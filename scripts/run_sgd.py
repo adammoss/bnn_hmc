@@ -196,8 +196,8 @@ def train_model():
     else:
 
         print('hello', key)
-        print()
-        key, = jax.random.split(key, 1)
+        #print()
+        #key, = jax.random.split(key, 1)
 
 
         net_state, test_predictions = onp.asarray(
