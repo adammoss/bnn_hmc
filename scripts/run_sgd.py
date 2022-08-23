@@ -101,10 +101,6 @@ def train_model():
      log_prior_fn, _, predict_fn, ensemble_upd_fn, metrics_fns,
      tabulate_metrics) = script_utils.get_data_model_fns(args)
 
-    print(key)
-    key, = jax.random.split(key, 1)
-    print(key)
-
     # Initialize step-size schedule and optimizer
     num_batches, total_steps = script_utils.get_num_batches_total_steps(
         args, train_set)
@@ -117,11 +113,6 @@ def train_model():
     opt_state = optimizer.init(params)
     net_state = jax.pmap(lambda _: net_state)(jnp.arange(num_devices))
     key = jax.random.split(key, num_devices)
-
-    print(key)
-    print(num_devices)
-    #key, = jax.random.split(key, 1)
-    #print(key)
 
     init_dict = checkpoint_utils.make_sgd_checkpoint_dict(-1, params, net_state,
                                                           opt_state, key)
@@ -145,11 +136,6 @@ def train_model():
 
             (params, net_state, opt_state, logprob_avg, key), iteration_time = (
                 sgd_train_epoch(params, net_state, opt_state, train_set, key))
-
-            print(key)
-            #key, = jax.random.split(key, 1)
-            #print(key)
-            #stop
 
             # Evaluate the model
             train_stats, test_stats = {"log_prob": logprob_avg}, {}
@@ -195,11 +181,6 @@ def train_model():
 
     else:
 
-        print('hello', key)
-        #print()
-        #key, = jax.random.split(key, 1)
-
-
         net_state, test_predictions, key = onp.asarray(
             predict_fn(net_apply, params, net_state, test_set, key))
         test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
@@ -208,10 +189,6 @@ def train_model():
         onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
         onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
         print(test_stats)
-
-        print('hello here', key)
-
-        #key, = jax.random.split(key, 1)
 
         net_state, test_predictions, key = onp.asarray(
             predict_fn(net_apply, params, net_state, test_set, key))
