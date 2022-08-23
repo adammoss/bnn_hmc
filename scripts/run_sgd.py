@@ -157,7 +157,7 @@ def train_model():
                 _, test_predictions, train_predictions, test_stats, train_stats_ = (
                     script_utils.evaluate(net_apply, params, net_state, train_set,
                                           test_set, predict_fn, metrics_fns,
-                                          log_prior_fn, key))
+                                          log_prior_fn, None))
                 train_stats.update(train_stats_)
                 if test_stats['nll'] < best_nll:
                     best_nll = test_stats['nll']

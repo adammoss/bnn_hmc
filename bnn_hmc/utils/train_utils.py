@@ -318,7 +318,10 @@ def make_get_predictions(activation_fn, num_batches=1, is_training=False):
         predictions = predictions.reshape(
             (num_batches * batch_size, *predictions.shape[2:]))
 
-        new_key, = jax.random.split(key, 1)
+        if key is not None:
+            new_key, = jax.random.split(key, 1)
+        else:
+            new_key = key
         print('doof',new_key)
         return net_state, predictions, new_key
 
