@@ -59,6 +59,11 @@ parser.add_argument(
     type=int,
     default=1,
     help="MC dropout repeats")
+parser.add_argument(
+    "--dropout_rate",
+    type=float,
+    default=None,
+    help="MC dropout repeats")
 
 args = parser.parse_args()
 train_utils.set_up_jax(args.tpu_ip, args.use_float64)
@@ -183,9 +188,9 @@ def train_model():
                 predict_fn(net_apply, params, net_state, test_set, key))
             test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
                                                       metrics_fns)
-            onp.save(os.path.join(dirname, '%s/predictions.npy' % i), test_predictions)
-            onp.save(os.path.join(dirname, '%s/test_set.npy' % i), test_set[1])
-            onp.save(os.path.join(dirname, '%s/metrics.npy' % i), test_stats)
+            onp.save(os.path.join(dirname, 'predictions_%s.npy' % i), test_predictions)
+            onp.save(os.path.join(dirname, 'test_set_%s.npy' % i), test_set[1])
+            onp.save(os.path.join(dirname, 'metrics_%s.npy' % i), test_stats)
             print(test_stats)
 
 

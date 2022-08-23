@@ -83,7 +83,8 @@ def get_data_model_fns(args):
             test_split=args.eval_split, scaling=args.scaling, image_size=args.image_size,
             builder_kwargs=builder_kwargs)
 
-    net_apply, net_init = models.get_model(args.model_name, data_info)
+    net_apply, net_init = models.get_model(args.model_name, data_info,
+                                           dropout_rate=args.dropout_rate)
     net_apply = precision_utils.rewrite_high_precision(net_apply)
 
     (likelihood_factory, predict_fn, ensemble_upd_fn, metrics_fns,
