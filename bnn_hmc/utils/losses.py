@@ -40,7 +40,6 @@ def make_xent_log_likelihood(temperature):
   def xent_log_likelihood(net_apply, params, net_state, batch, is_training, key):
     """Computes the negative log-likelihood."""
     _, y = batch
-    #key, net_init_key = jax.random.split(jax.random.PRNGKey(42), 2)
     logits, net_state = net_apply(params, net_state, key, batch, is_training)
     num_classes = logits.shape[-1]
     labels = jax.nn.one_hot(y, num_classes)
