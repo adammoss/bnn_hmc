@@ -181,7 +181,7 @@ def train_model():
 
     else:
 
-        print(key)
+        print('hello', key)
         key, = jax.random.split(key, 1)
 
 
