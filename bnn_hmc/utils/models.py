@@ -354,4 +354,5 @@ def get_model(model_name, data_info, **kwargs):
   }
   net_fn = _MODEL_FNS[model_name](data_info, **kwargs)
   net = hk.transform_with_state(net_fn)
+  #net = hk.without_apply_rng(net)
   return net.apply, net.init
