@@ -85,7 +85,7 @@ def preprocess_network_outputs_gaussian(predictions):
 
 def make_gaussian_likelihood(temperature):
 
-  def gaussian_log_likelihood(net_apply, params, net_state, batch, is_training):
+  def gaussian_log_likelihood(net_apply, params, net_state, batch, is_training, key):
     """Computes the negative log-likelihood.
 
     The outputs of the network should be two-dimensional.
@@ -93,7 +93,7 @@ def make_gaussian_likelihood(temperature):
     as inverse-softplus of the predictive standard deviation.
     """
     _, y = batch
-    predictions, net_state = net_apply(params, net_state, None, batch,
+    predictions, net_state = net_apply(params, net_state, key, batch,
                                        is_training)
 
     predictions = preprocess_network_outputs_gaussian(predictions)
