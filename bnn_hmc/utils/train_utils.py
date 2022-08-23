@@ -317,7 +317,7 @@ def make_get_predictions(activation_fn, num_batches=1, is_training=False):
                                                      (net_state, key), dataset)
         predictions = predictions.reshape(
             (num_batches * batch_size, *predictions.shape[2:]))
-        return net_state, predictions
+        return net_state, predictions, key
 
     return get_predictions
 
