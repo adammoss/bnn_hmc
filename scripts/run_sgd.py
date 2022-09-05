@@ -194,10 +194,12 @@ def train_model():
             ensemble_stats = train_utils.evaluate_metrics(ensemble_predictions,
                                                           test_set[1], metrics_fns)
             num_ensembled += 1
-            onp.save(os.path.join(dirname, 'predictions_%s.npy' % i), ensemble_predictions)
-            onp.save(os.path.join(dirname, 'test_set_%s.npy' % i), test_set[1])
-            onp.save(os.path.join(dirname, 'metrics_%s.npy' % i), ensemble_stats)
-            print(ensemble_stats)
+            onp.save(os.path.join(dirname, 'predictions_%s.npy' % i), test_predictions)
+
+        onp.save(os.path.join(dirname, 'ensemble_predictions.npy'), ensemble_predictions)
+        onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
+        onp.save(os.path.join(dirname, 'metrics.npy'), ensemble_stats)
+        print(ensemble_stats)
 
 
 if __name__ == "__main__":
