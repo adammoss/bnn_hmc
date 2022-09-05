@@ -182,16 +182,22 @@ def train_model():
 
     else:
 
+        num_ensembled = 0
+        ensemble_predictions = None
         for i in range(args.repeats):
 
             net_state, test_predictions, key = onp.asarray(
                 predict_fn(net_apply, params, net_state, test_set, key))
-            test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-                                                      metrics_fns)
-            onp.save(os.path.join(dirname, 'predictions_%s.npy' % i), test_predictions)
+
+            ensemble_predictions = ensemble_upd_fn(ensemble_predictions,
+                                                   num_ensembled, test_predictions)
+            ensemble_stats = train_utils.evaluate_metrics(ensemble_predictions,
+                                                          test_set[1], metrics_fns)
+            num_ensembled += 1
+            onp.save(os.path.join(dirname, 'predictions_%s.npy' % i), ensemble_predictions)
             onp.save(os.path.join(dirname, 'test_set_%s.npy' % i), test_set[1])
-            onp.save(os.path.join(dirname, 'metrics_%s.npy' % i), test_stats)
-            print(test_stats)
+            onp.save(os.path.join(dirname, 'metrics_%s.npy' % i), ensemble_stats)
+            print(ensemble_stats)
 
 
 if __name__ == "__main__":
