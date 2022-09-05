@@ -198,7 +198,7 @@ def train_model():
 
         onp.save(os.path.join(dirname, 'ensemble_predictions.npy'), ensemble_predictions)
         onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
-        onp.save(os.path.join(dirname, 'metrics.npy'), ensemble_stats)
+        onp.save(os.path.join(dirname, 'ensemble_metrics.npy'), ensemble_stats)
         print(ensemble_stats)
 
 
