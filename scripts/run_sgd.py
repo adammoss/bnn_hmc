@@ -178,6 +178,10 @@ def train_model():
             num_ensembled = 0
             ensemble_predictions = None
             for i, root in enumerate(glob.glob(args.ensemble_root)):
+                metrics = onp.load(root + '/metrics.npy', allow_pickle=True)
+                if not onp.isfinite(metrics.item()['nll']):
+                    # Do not include any runs which have diverged
+                    continue
                 test_predictions = onp.load(root + '/predictions.npy')
                 ensemble_predictions = ensemble_upd_fn(ensemble_predictions,
                                                        num_ensembled, test_predictions)
@@ -189,7 +193,7 @@ def train_model():
             onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
             onp.save(os.path.join(dirname, 'ensemble_metrics.npy'), ensemble_stats)
             print(ensemble_stats)
-            
+
         else:
 
             net_state, test_predictions = onp.asarray(
