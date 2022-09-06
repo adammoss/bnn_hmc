@@ -34,6 +34,7 @@ import numpy as onp
 import jax
 import argparse
 import sys
+import glob
 
 sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
@@ -172,14 +173,33 @@ def train_model():
 
     else:
 
-        net_state, test_predictions = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set))
-        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-                                                  metrics_fns)
-        onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)
-        onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
-        onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
-        print(test_stats)
+        if args.ensemble_root is not None:
+
+            num_ensembled = 0
+            ensemble_predictions = None
+            for i, root in enumerate(glob.glob(args.ensemble_root)):
+                test_predictions = onp.load(root + '/predictions.npy')
+                ensemble_predictions = ensemble_upd_fn(ensemble_predictions,
+                                                       num_ensembled, test_predictions)
+                ensemble_stats = train_utils.evaluate_metrics(ensemble_predictions,
+                                                              test_set[1], metrics_fns)
+                num_ensembled += 1
+
+            onp.save(os.path.join(dirname, 'ensemble_predictions.npy'), ensemble_predictions)
+            onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
+            onp.save(os.path.join(dirname, 'ensemble_metrics.npy'), ensemble_stats)
+            print(ensemble_stats)
+            
+        else:
+
+            net_state, test_predictions = onp.asarray(
+                predict_fn(net_apply, params, net_state, test_set))
+            test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                                      metrics_fns)
+            onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)
+            onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
+            onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
+            print(test_stats)
 
 
 if __name__ == "__main__":

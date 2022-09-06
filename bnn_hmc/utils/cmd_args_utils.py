@@ -117,6 +117,10 @@ def add_common_flags(parser):
       type=int,
       default=None,
       help="Optional image resize")
+  parser.add_argument(
+      "--ensemble_root",
+      type=str,
+      default=None)
 
 
 def add_sgd_flags(parser):
