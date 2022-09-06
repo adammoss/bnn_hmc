@@ -121,6 +121,16 @@ def add_common_flags(parser):
       "--ensemble_root",
       type=str,
       default=None)
+  parser.add_argument(
+      "--ensemble_exclude_metric",
+      type=str,
+      default=None)
+  parser.add_argument(
+      "--ensemble_exclude_value",
+      type=float,
+      default=1.0)
+
+
 
 
 def add_sgd_flags(parser):

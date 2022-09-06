@@ -179,7 +179,9 @@ def train_model():
             ensemble_predictions = None
             for i, root in enumerate(glob.glob(args.ensemble_root)):
                 metrics = onp.load(root + '/metrics.npy', allow_pickle=True)
-                if not onp.isfinite(metrics.item()['nll']):
+                if args.ensemble_exclude_metric is not None and \
+                        (not onp.isfinite(metrics.item()[args.ensemble_exclude_metric]) or
+                         metrics.item()[args.ensemble_exclude_metric] > args.ensemble_exclude_value):
                     # Do not include any runs which have diverged
                     continue
                 test_predictions = onp.load(root + '/predictions.npy')
