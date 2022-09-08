@@ -59,6 +59,7 @@ class ImgDatasets(Enum):
     MIRABEST_CONFIDENT = "mirabest/confident"
     MLSST_Y1 = "mlsst/Y1"
     MLSST_Y10 = "mlsst/Y10"
+    SLC_SPACE = "slc/space"
 
 
 class ImgRegDatasets(Enum):
@@ -103,6 +104,7 @@ _ALL_IMG_DS_STATS = {
     ImgDatasets.MLSST_Y1: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
     ImgDatasets.MLSST_Y10: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
     ImgRegDatasets.CMD: ((26.0,), (1.0,)),
+    ImgRegDatasets.SLC_SPACE: ((4.3368458e-13,), (5.503901e-12,)),
 }
 
 _IMDB_CONFIG = {"max_features": 20000, "max_len": 100, "num_train": 20000}
