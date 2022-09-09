@@ -45,60 +45,6 @@ from bnn_hmc.utils import train_utils
 from bnn_hmc.utils import optim_utils
 from bnn_hmc.utils import script_utils
 
-parser = argparse.ArgumentParser(description="Run SG-MCMC training")
-cmd_args_utils.add_common_flags(parser)
-cmd_args_utils.add_sgd_flags(parser)
-
-parser.add_argument(
-    "--save_all_ensembled",
-    action="store_true",
-    help="Save all the networks that are ensembled")
-parser.add_argument(
-    "--ensemble_freq",
-    type=int,
-    default=10,
-    help="Frequency of checkpointing (epochs; default: 10)")
-
-parser.add_argument(
-    "--preconditioner",
-    type=str,
-    default="None",
-    choices=["None", "RMSprop"],
-    help="Choice of preconditioner; None or RMSprop "
-         "(default: None)")
-
-# Step size schedule
-parser.add_argument(
-    "--step_size_schedule",
-    type=str,
-    default="constant",
-    choices=["constant", "cyclical"],
-    help="Choice step size schedule;"
-         "constant sets the step size to final_step_size "
-         "after a cosine burn-in for num_burnin_epochs epochs."
-         "Cyclical uses a constant burn-in for num_burnin_epochs "
-         "epochs and then a cosine cyclical schedule"
-         "(default: constant)")
-parser.add_argument(
-    "--num_burnin_epochs",
-    type=int,
-    default=300,
-    help="Number of epochs before final lr is reached")
-parser.add_argument(
-    "--final_step_size",
-    type=float,
-    default=None,
-    help="Final step size (used only with constant schedule; "
-         "default: init_step_size)")
-parser.add_argument(
-    "--step_size_cycle_length_epochs",
-    type=float,
-    default=50,
-    help="Cycle length "
-         "(epochs; used only with cyclic schedule; default: 50)")
-
-cmd_args = parser.parse_args()
-
 
 def get_dirname_tfwriter(args):
     method_name = "sgld_mom_{}_preconditioner_{}".format(args.momentum_decay,
@@ -245,6 +191,56 @@ def train_model():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run SG-MCMC training")
+    cmd_args_utils.add_common_flags(parser)
+    cmd_args_utils.add_sgd_flags(parser)
+    parser.add_argument(
+        "--save_all_ensembled",
+        action="store_true",
+        help="Save all the networks that are ensembled")
+    parser.add_argument(
+        "--ensemble_freq",
+        type=int,
+        default=10,
+        help="Frequency of checkpointing (epochs; default: 10)")
+
+    parser.add_argument(
+        "--preconditioner",
+        type=str,
+        default="None",
+        choices=["None", "RMSprop"],
+        help="Choice of preconditioner; None or RMSprop "
+             "(default: None)")
+    # Step size schedule
+    parser.add_argument(
+        "--step_size_schedule",
+        type=str,
+        default="constant",
+        choices=["constant", "cyclical"],
+        help="Choice step size schedule;"
+             "constant sets the step size to final_step_size "
+             "after a cosine burn-in for num_burnin_epochs epochs."
+             "Cyclical uses a constant burn-in for num_burnin_epochs "
+             "epochs and then a cosine cyclical schedule"
+             "(default: constant)")
+    parser.add_argument(
+        "--num_burnin_epochs",
+        type=int,
+        default=300,
+        help="Number of epochs before final lr is reached")
+    parser.add_argument(
+        "--final_step_size",
+        type=float,
+        default=None,
+        help="Final step size (used only with constant schedule; "
+             "default: init_step_size)")
+    parser.add_argument(
+        "--step_size_cycle_length_epochs",
+        type=float,
+        default=50,
+        help="Cycle length "
+             "(epochs; used only with cyclic schedule; default: 50)")
+    cmd_args = parser.parse_args()
     train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
     script_utils.print_visible_devices()
     train_model(cmd_args)

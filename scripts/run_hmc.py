@@ -46,36 +46,6 @@ from bnn_hmc.utils import script_utils  # pytype: disable=import-error
 from bnn_hmc.utils import train_utils  # pytype: disable=import-error
 from bnn_hmc.utils import tree_utils  # pytype: disable=import-error
 
-parser = argparse.ArgumentParser(description="Run an HMC chain on a cloud TPU")
-cmd_args_utils.add_common_flags(parser)
-parser.add_argument(
-    "--step_size", type=float, default=1.e-4, help="HMC step size")
-parser.add_argument(
-    "--trajectory_len", type=float, default=1.e-3, help="HMC trajectory length")
-parser.add_argument(
-    "--num_iterations",
-    type=int,
-    default=1000,
-    help="Total number of HMC iterations")
-parser.add_argument(
-    "--max_num_leapfrog_steps",
-    type=int,
-    default=10000,
-    help="Maximum number of leapfrog steps allowed; increase to"
-         "run longer trajectories")
-parser.add_argument(
-    "--num_burn_in_iterations",
-    type=int,
-    default=0,
-    help="Number of burn-in iterations")
-parser.add_argument(
-    "--no_mh",
-    default=False,
-    action="store_true",
-    help="If set, Metropolis Hastings correction is ignored")
-
-cmd_args = parser.parse_args()
-
 
 def get_dirname_tfwriter(cmd_args):
     subdirname = ("model_{}_wd_{}_stepsize_{}_trajlen_{}_burnin_{}_mh_{}_temp_{}_"
@@ -200,6 +170,34 @@ def train_model():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run an HMC chain on a cloud TPU")
+    cmd_args_utils.add_common_flags(parser)
+    parser.add_argument(
+        "--step_size", type=float, default=1.e-4, help="HMC step size")
+    parser.add_argument(
+        "--trajectory_len", type=float, default=1.e-3, help="HMC trajectory length")
+    parser.add_argument(
+        "--num_iterations",
+        type=int,
+        default=1000,
+        help="Total number of HMC iterations")
+    parser.add_argument(
+        "--max_num_leapfrog_steps",
+        type=int,
+        default=10000,
+        help="Maximum number of leapfrog steps allowed; increase to"
+             "run longer trajectories")
+    parser.add_argument(
+        "--num_burn_in_iterations",
+        type=int,
+        default=0,
+        help="Number of burn-in iterations")
+    parser.add_argument(
+        "--no_mh",
+        default=False,
+        action="store_true",
+        help="If set, Metropolis Hastings correction is ignored")
+    cmd_args = parser.parse_args()
     train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
     script_utils.print_visible_devices()
     train_model(cmd_args)

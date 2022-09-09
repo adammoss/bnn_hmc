@@ -46,18 +46,6 @@ from bnn_hmc.utils import train_utils
 from bnn_hmc.utils import optim_utils
 from bnn_hmc.utils import script_utils
 
-parser = argparse.ArgumentParser(description="Run SGD on a cloud TPU")
-cmd_args_utils.add_common_flags(parser)
-cmd_args_utils.add_sgd_flags(parser)
-parser.add_argument(
-    "--optimizer",
-    type=str,
-    default="SGD",
-    choices=["SGD", "Adam"],
-    help="Choice of optimizer; (SGD or Adam; default: SGD)")
-
-cmd_args = parser.parse_args()
-
 
 def get_optimizer(lr_schedule, args):
     if args.optimizer == "SGD":
@@ -208,6 +196,16 @@ def train_model(args):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run SGD on a cloud TPU")
+    cmd_args_utils.add_common_flags(parser)
+    cmd_args_utils.add_sgd_flags(parser)
+    parser.add_argument(
+        "--optimizer",
+        type=str,
+        default="SGD",
+        choices=["SGD", "Adam"],
+        help="Choice of optimizer; (SGD or Adam; default: SGD)")
+    cmd_args = parser.parse_args()
     train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
     script_utils.print_visible_devices()
     train_model(cmd_args)
