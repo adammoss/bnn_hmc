@@ -75,8 +75,7 @@ parser.add_argument(
     help="SGD checkpoint to use for initialization of the "
          "mean of the MFVI approximation")
 
-args = parser.parse_args()
-train_utils.set_up_jax(args.tpu_ip, args.use_float64)
+cmd_args = parser.parse_args()
 
 
 def get_optimizer(lr_schedule, args):
@@ -253,5 +252,6 @@ def train_model():
 
 
 if __name__ == "__main__":
+    train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
     script_utils.print_visible_devices()
-    train_model()
+    train_model(cmd_args)

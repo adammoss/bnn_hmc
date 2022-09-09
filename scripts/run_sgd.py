@@ -56,8 +56,7 @@ parser.add_argument(
     choices=["SGD", "Adam"],
     help="Choice of optimizer; (SGD or Adam; default: SGD)")
 
-args = parser.parse_args()
-train_utils.set_up_jax(args.tpu_ip, args.use_float64)
+cmd_args = parser.parse_args()
 
 
 def get_optimizer(lr_schedule, args):
@@ -85,7 +84,7 @@ def get_dirname_tfwriter(args):
     return dirname, tf_writer
 
 
-def train_model():
+def train_model(args):
     # Initialize training directory
     dirname, tf_writer = get_dirname_tfwriter(args)
 
@@ -209,5 +208,6 @@ def train_model():
 
 
 if __name__ == "__main__":
+    train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
     script_utils.print_visible_devices()
-    train_model()
+    train_model(cmd_args)

@@ -34,141 +34,138 @@ import tensorflow.compat.v2 as tf
 
 
 def add_common_flags(parser):
-  parser.add_argument(
-      "--tpu_ip",
-      type=str,
-      default=None,
-      help="Cloud TPU internal ip "
-      "(see `gcloud compute tpus list`)")
-  parser.add_argument("--seed", type=int, default=0, help="Random seed")
-  parser.add_argument(
-      "--weight_decay",
-      type=float,
-      default=15.,
-      help="Weight decay, equivalent to setting prior std")
-  parser.add_argument(
-      "--temperature",
-      type=float,
-      default=1.,
-      help="Temperature of the posterior")
-  parser.add_argument(
-      "--init_checkpoint",
-      type=str,
-      default=None,
-      help="Checkpoint to use for initialization of the chain")
-  parser.add_argument(
-      "--tabulate_freq",
-      type=int,
-      default=40,
-      help="Frequency of tabulate table header prints")
-  parser.add_argument(
-      "--dir",
-      type=str,
-      default=None,
-      required=True,
-      help="Directory for checkpoints and tensorboard logs")
-  parser.add_argument(
-      "--dataset_name", type=str, default="cifar10", help="Name of the dataset")
-  parser.add_argument(
-      "--subset_train_to",
-      type=int,
-      default=None,
-      help="Size of the subset of train data to use; "
-      "full dataset is used by default")
-  parser.add_argument(
-      "--train_split",
-      type=str,
-      default="train",
-      help="Train split")
-  parser.add_argument(
-      "--test_split",
-      type=str,
-      default="test",
-      help="Test split")
-  parser.add_argument(
-      "--eval_split",
-      type=str,
-      default=None,
-      help="Evaluation dataset")
-  parser.add_argument(
-      "--scaling",
-      type=str,
-      default=None,
-      help="Scaling of dataset")
-  parser.add_argument(
-      "--model_name", type=str, default="lenet", help="Name of the dataset")
-  parser.add_argument(
-      "--use_float64",
-      dest="use_float64",
-      action="store_true",
-      help="Use float64 precision (does not work on TPUs)")
-  parser.add_argument(
-      "--patience",
-      type=int,
-      default=None,
-      help="Set to terminate training early")
-  parser.add_argument(
-      "--builder_kwargs",
-      type=str,
-      default=None,
-      help="Optional dataset builder keyword arguments")
-  parser.add_argument(
-      "--image_size",
-      type=int,
-      default=None,
-      help="Optional image resize")
-  parser.add_argument(
-      "--ensemble_root",
-      type=str,
-      default=None)
-  parser.add_argument(
-      "--ensemble_exclude_metric",
-      type=str,
-      default=None)
-  parser.add_argument(
-      "--ensemble_exclude_value",
-      type=float,
-      default=1.0)
-
-
+    parser.add_argument(
+        "--tpu_ip",
+        type=str,
+        default=None,
+        help="Cloud TPU internal ip "
+             "(see `gcloud compute tpus list`)")
+    parser.add_argument("--seed", type=int, default=0, help="Random seed")
+    parser.add_argument(
+        "--weight_decay",
+        type=float,
+        default=15.,
+        help="Weight decay, equivalent to setting prior std")
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=1.,
+        help="Temperature of the posterior")
+    parser.add_argument(
+        "--init_checkpoint",
+        type=str,
+        default=None,
+        help="Checkpoint to use for initialization of the chain")
+    parser.add_argument(
+        "--tabulate_freq",
+        type=int,
+        default=40,
+        help="Frequency of tabulate table header prints")
+    parser.add_argument(
+        "--dir",
+        type=str,
+        default=None,
+        required=True,
+        help="Directory for checkpoints and tensorboard logs")
+    parser.add_argument(
+        "--dataset_name", type=str, default="cifar10", help="Name of the dataset")
+    parser.add_argument(
+        "--subset_train_to",
+        type=int,
+        default=None,
+        help="Size of the subset of train data to use; "
+             "full dataset is used by default")
+    parser.add_argument(
+        "--train_split",
+        type=str,
+        default="train",
+        help="Train split")
+    parser.add_argument(
+        "--test_split",
+        type=str,
+        default="test",
+        help="Test split")
+    parser.add_argument(
+        "--eval_split",
+        type=str,
+        default=None,
+        help="Evaluation dataset")
+    parser.add_argument(
+        "--scaling",
+        type=str,
+        default=None,
+        help="Scaling of dataset")
+    parser.add_argument(
+        "--model_name", type=str, default="lenet", help="Name of the dataset")
+    parser.add_argument(
+        "--use_float64",
+        dest="use_float64",
+        action="store_true",
+        help="Use float64 precision (does not work on TPUs)")
+    parser.add_argument(
+        "--patience",
+        type=int,
+        default=None,
+        help="Set to terminate training early")
+    parser.add_argument(
+        "--builder_kwargs",
+        type=str,
+        default=None,
+        help="Optional dataset builder keyword arguments")
+    parser.add_argument(
+        "--image_size",
+        type=int,
+        default=None,
+        help="Optional image resize")
+    parser.add_argument(
+        "--ensemble_root",
+        type=str,
+        default=None)
+    parser.add_argument(
+        "--ensemble_exclude_metric",
+        type=str,
+        default=None)
+    parser.add_argument(
+        "--ensemble_exclude_value",
+        type=float,
+        default=1.0)
 
 
 def add_sgd_flags(parser):
-
-  parser.add_argument(
-      "--init_step_size",
-      type=float,
-      default=1.e-6,
-      help="Initial SGD step size")
-  parser.add_argument(
-      "--num_epochs",
-      type=int,
-      default=300,
-      help="Total number of SGD epochs iterations")
-  parser.add_argument("--batch_size", type=int, default=80, help="Batch size")
-  parser.add_argument(
-      "--eval_freq",
-      type=int,
-      default=10,
-      help="Frequency of evaluation (epochs)")
-  parser.add_argument(
-      "--save_freq",
-      type=int,
-      default=50,
-      help="Frequency of checkpointing (epochs)")
-  parser.add_argument(
-      "--momentum_decay",
-      type=float,
-      default=0.9,
-      help="Momentum decay parameter for SGD")
+    parser.add_argument(
+        "--init_step_size",
+        type=float,
+        default=1.e-6,
+        help="Initial SGD step size")
+    parser.add_argument(
+        "--num_epochs",
+        type=int,
+        default=300,
+        help="Total number of SGD epochs iterations")
+    parser.add_argument("--batch_size", type=int, default=80, help="Batch size")
+    parser.add_argument(
+        "--eval_freq",
+        type=int,
+        default=10,
+        help="Frequency of evaluation (epochs)")
+    parser.add_argument(
+        "--save_freq",
+        type=int,
+        default=50,
+        help="Frequency of checkpointing (epochs)")
+    parser.add_argument(
+        "--momentum_decay",
+        type=float,
+        default=0.9,
+        help="Momentum decay parameter for SGD")
 
 
 def save_cmd(dirname, tf_writer):
-  command = " ".join(sys.argv)
-  with open(os.path.join(dirname, "command.sh"), "w") as f:
-    f.write(command)
-    f.write("\n")
-  if tf_writer is not None:
-    with tf_writer.as_default():
-      tf.summary.text(
-          "command", command, step=0, description="Command line arguments")
+    command = " ".join(sys.argv)
+    with open(os.path.join(dirname, "command.sh"), "w") as f:
+        f.write(command)
+        f.write("\n")
+    if tf_writer is not None:
+        with tf_writer.as_default():
+            tf.summary.text(
+                "command", command, step=0, description="Command line arguments")
