@@ -64,8 +64,7 @@ def add_common_flags(parser):
     parser.add_argument(
         "--dir",
         type=str,
-        default=None,
-        required=True,
+        default='runs',
         help="Directory for checkpoints and tensorboard logs")
     parser.add_argument(
         "--dataset_name", type=str, default="cifar10", help="Name of the dataset")

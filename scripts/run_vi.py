@@ -48,6 +48,37 @@ from bnn_hmc.utils import script_utils
 from bnn_hmc.core import vi
 
 
+def get_args():
+    parser = argparse.ArgumentParser(description="Run MFVI training")
+    cmd_args_utils.add_common_flags(parser)
+    cmd_args_utils.add_sgd_flags(parser)
+    parser.add_argument(
+        "--optimizer",
+        type=str,
+        default="Adam",
+        choices=["SGD", "Adam"],
+        help="Choice of optimizer; (SGD or Adam; default: SGD)")
+    parser.add_argument(
+        "--vi_sigma_init",
+        type=float,
+        default=1e-3,
+        help="Initial value of the standard deviation over the "
+             "weights in MFVI (default: 1e-3)")
+    parser.add_argument(
+        "--vi_ensemble_size",
+        type=int,
+        default=20,
+        help="Size of the ensemble sampled in the VI evaluation "
+             "(default: 20)")
+    parser.add_argument(
+        "--mean_init_checkpoint",
+        type=str,
+        default=None,
+        help="SGD checkpoint to use for initialization of the "
+             "mean of the MFVI approximation")
+    return parser.parse_args()
+
+
 def get_optimizer(lr_schedule, args):
     if args.optimizer == "SGD":
         optimizer = optim_utils.make_sgd_optimizer(
@@ -222,34 +253,7 @@ def train_model():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run MFVI training")
-    cmd_args_utils.add_common_flags(parser)
-    cmd_args_utils.add_sgd_flags(parser)
-    parser.add_argument(
-        "--optimizer",
-        type=str,
-        default="Adam",
-        choices=["SGD", "Adam"],
-        help="Choice of optimizer; (SGD or Adam; default: SGD)")
-    parser.add_argument(
-        "--vi_sigma_init",
-        type=float,
-        default=1e-3,
-        help="Initial value of the standard deviation over the "
-             "weights in MFVI (default: 1e-3)")
-    parser.add_argument(
-        "--vi_ensemble_size",
-        type=int,
-        default=20,
-        help="Size of the ensemble sampled in the VI evaluation "
-             "(default: 20)")
-    parser.add_argument(
-        "--mean_init_checkpoint",
-        type=str,
-        default=None,
-        help="SGD checkpoint to use for initialization of the "
-             "mean of the MFVI approximation")
-    cmd_args = parser.parse_args()
+    cmd_args = get_args()
     train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
     script_utils.print_visible_devices()
     train_model(cmd_args)
