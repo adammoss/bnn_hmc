@@ -124,7 +124,7 @@ def make_vi_ensemble_predict_fn(predict_fn, ensemble_upd_fn, args):
     return vi_ensemble_predict_fn
 
 
-def train_model():
+def train_model(args):
     # Initialize training directory
     dirname, tf_writer = get_dirname_tfwriter(args)
 
