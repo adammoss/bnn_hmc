@@ -18,10 +18,13 @@ cmd_args = get_vi_args()
 train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
 script_utils.print_visible_devices()
 
-cmd_args.weight_decay = 5
-cmd_args.dir = 'results/sgd/mirabestc/0/'
 cmd_args.dataset_name = 'mirabest/confident'
 cmd_args.model_name = 'lenet'
+cmd_args.train_split = 'train[:80%]'
+cmd_args.test_split = 'train[80%:]'
+
+cmd_args.weight_decay = 5
+cmd_args.dir = 'runs/vi/mirabestc/0/'
 cmd_args.init_step_size = 1e-4
 cmd_args.num_epochs = 200
 cmd_args.eval_freq = 5
