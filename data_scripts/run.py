@@ -63,9 +63,9 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
 
     # SGD
 
@@ -90,9 +90,9 @@ for c in config:
             cmd_args.eval_split = None
             cmd_args.seed = i*num_ensemble_repeats + j
             cmd_args.dir = 'runs/sdg/%s/%s/%s/' % (c['dataset'], i, j)
-            #train_sgd_model(cmd_args)
+            train_sgd_model(cmd_args)
             cmd_args.eval_split = c['eval']
-            #train_sgd_model(cmd_args)
+            train_sgd_model(cmd_args)
         cmd_args.ensemble_root = 'runs/sdg/%s/%s/*/*' % (c['dataset'], i)
         train_sgd_model(cmd_args)
 
@@ -122,9 +122,9 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/mcd/%s/%s/' % (c['dataset'], i)
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
 
     # HMC
 
@@ -152,4 +152,4 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/mcd/%s/%s/' % (c['dataset'], i)
-        #train_hmc_model(cmd_args)
+        train_hmc_model(cmd_args)
