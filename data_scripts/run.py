@@ -84,6 +84,7 @@ for c in config:
     cmd_args.weight_decay = 10
     cmd_args.init_step_size = 3e-7
     cmd_args.num_epochs = c['ensemble_epochs']
+    cmd_args.batch_size = c['batch_size']
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 5
     cmd_args.optimizer = 'SGD'
@@ -114,6 +115,7 @@ for c in config:
 
     cmd_args.weight_decay = 10
     cmd_args.init_step_size = 3e-7
+    cmd_args.batch_size = c['batch_size']
     cmd_args.num_epochs = 200
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 5
