@@ -29,11 +29,15 @@ config = [
 num_repeats = 3
 num_ensemble_repeats = 10
 
-repo = Repo('.')
+try:
+    repo = Repo('.')
+except:
+    repo = Repo('bnn_hmc')
 
 for c in config:
 
-    repo.git.checkout('main')
+    try:
+        repo.git.checkout('main')
 
     cmd_args = get_vi_args()
     train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
