@@ -36,8 +36,7 @@ except:
 
 for c in config:
 
-    try:
-        repo.git.checkout('main')
+    repo.git.checkout('main')
 
     cmd_args = get_vi_args()
     train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
