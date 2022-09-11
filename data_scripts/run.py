@@ -46,6 +46,8 @@ for c in config:
 
     # VI
 
+    print('Performing VI')
+
     cmd_args.weight_decay = 5
     cmd_args.init_step_size = 1e-4
     cmd_args.num_epochs = 200
@@ -66,6 +68,8 @@ for c in config:
         #train_vi_model(cmd_args)
 
     # SGD
+
+    print('Performing Deep Ensembles')
 
     cmd_args = get_sgd_args()
 
@@ -94,6 +98,8 @@ for c in config:
 
     # MCD
 
+    print('Performing MCD')
+
     repo.git.checkout('dropout_wip')
 
     cmd_args = get_sgd_args()
@@ -121,6 +127,8 @@ for c in config:
         #train_vi_model(cmd_args)
 
     # HMC
+
+    print('Performing HMC')
 
     repo.git.checkout('main')
 
