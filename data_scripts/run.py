@@ -22,7 +22,10 @@ config = [
         'test': 'train[80%:]',
         'eval': 'test',
         'batch_size': 53,
-        'ensemble_epochs': 100
+        'ensemble_epochs': 100,
+        'subset_train_to': None,
+        'scaling': None,
+        'builder_kwargs': None,
     }
 ]
 
@@ -56,6 +59,9 @@ for c in config:
     cmd_args.num_epochs = 200
     cmd_args.eval_freq = 5
     cmd_args.batch_size = c['batch_size']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
+    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.patience = 10
     cmd_args.save_freq = 5
     cmd_args.optimizer = 'Adam'
@@ -85,6 +91,9 @@ for c in config:
     cmd_args.init_step_size = 3e-7
     cmd_args.num_epochs = c['ensemble_epochs']
     cmd_args.batch_size = c['batch_size']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
+    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 5
     cmd_args.optimizer = 'SGD'
@@ -116,6 +125,9 @@ for c in config:
     cmd_args.weight_decay = 10
     cmd_args.init_step_size = 3e-7
     cmd_args.batch_size = c['batch_size']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
+    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.num_epochs = 200
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 5
@@ -145,6 +157,8 @@ for c in config:
     # Compute ensemble predictions directly as we don't use early stopping
     cmd_args.test_split = c['eval']
 
+    cmd_args.scaling = c['scaling']
+    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.weight_decay = 50
     cmd_args.temperature = 1.0
     cmd_args.step_size = 3.0e-5
