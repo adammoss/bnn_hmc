@@ -177,7 +177,10 @@ def train_model(args):
 
             num_ensembled = 0
             ensemble_predictions = None
+            ensemble_stats = None
             for i, root in enumerate(glob.glob(args.ensemble_root)):
+                if not os.path.isfile(root + '/metrics.npy'):
+                    continue
                 metrics = onp.load(root + '/metrics.npy', allow_pickle=True)
                 if args.ensemble_exclude_metric is not None and \
                         (not onp.isfinite(metrics.item()[args.ensemble_exclude_metric]) or
