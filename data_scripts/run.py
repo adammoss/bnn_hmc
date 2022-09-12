@@ -94,6 +94,7 @@ for c in config:
     cmd_args.optimizer = 'SGD'
 
     for i in range(num_repeats):
+        cmd_args.ensemble_root = None
         for j in range(num_ensemble_repeats):
             cmd_args.eval_split = None
             cmd_args.seed = i*num_ensemble_repeats + j
