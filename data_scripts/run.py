@@ -97,11 +97,11 @@ for c in config:
         for j in range(num_ensemble_repeats):
             cmd_args.eval_split = None
             cmd_args.seed = i*num_ensemble_repeats + j
-            cmd_args.dir = 'runs/sdg/%s/%s/%s/' % (c['dataset'], i, j)
+            cmd_args.dir = 'runs/sgd/%s/%s/%s/' % (c['dataset'], i, j)
             train_sgd_model(cmd_args)
             cmd_args.eval_split = c['eval']
             train_sgd_model(cmd_args)
-        cmd_args.ensemble_root = 'runs/sdg/%s/%s/*/*' % (c['dataset'], i)
+        cmd_args.ensemble_root = 'runs/sgd/%s/%s/*/*' % (c['dataset'], i)
         train_sgd_model(cmd_args)
 
     # HMC

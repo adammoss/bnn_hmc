@@ -183,6 +183,7 @@ def train_model(args):
                 if not os.path.isfile(root + '/metrics.npy'):
                     continue
                 metrics = onp.load(root + '/metrics.npy', allow_pickle=True)
+                print(i, metrics)
                 if args.ensemble_exclude_metric is not None and \
                         (not onp.isfinite(metrics.item()[args.ensemble_exclude_metric]) or
                          metrics.item()[args.ensemble_exclude_metric] > args.ensemble_exclude_value):
@@ -201,6 +202,8 @@ def train_model(args):
             print(ensemble_stats)
 
         else:
+
+            print(dirname)
 
             net_state, test_predictions = onp.asarray(
                 predict_fn(net_apply, params, net_state, test_set))
