@@ -72,9 +72,9 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
-        train_vi_model(cmd_args)
+        #train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
-        train_vi_model(cmd_args)
+        #train_vi_model(cmd_args)
 
     # SGD
 
@@ -103,11 +103,11 @@ for c in config:
             cmd_args.eval_split = None
             cmd_args.seed = i*num_ensemble_repeats + j
             cmd_args.dir = 'runs/sdg/%s/%s/%s/' % (c['dataset'], i, j)
-            train_sgd_model(cmd_args)
+            #train_sgd_model(cmd_args)
             cmd_args.eval_split = c['eval']
-            train_sgd_model(cmd_args)
+            #train_sgd_model(cmd_args)
         cmd_args.ensemble_root = 'runs/sdg/%s/%s/*/*' % (c['dataset'], i)
-        train_sgd_model(cmd_args)
+        #train_sgd_model(cmd_args)
 
     # MCD
 
@@ -131,7 +131,6 @@ for c in config:
     cmd_args.num_epochs = 200
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 5
-    cmd_args.patience = 10
     cmd_args.dropout_rate = 0.1
     cmd_args.optimizer = 'SGD'
 
