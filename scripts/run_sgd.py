@@ -34,6 +34,7 @@ import numpy as onp
 import jax
 import argparse
 import sys
+import glob
 
 sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
@@ -45,28 +46,28 @@ from bnn_hmc.utils import train_utils
 from bnn_hmc.utils import optim_utils
 from bnn_hmc.utils import script_utils
 
-parser = argparse.ArgumentParser(description="Run SGD on a cloud TPU")
-cmd_args_utils.add_common_flags(parser)
-cmd_args_utils.add_sgd_flags(parser)
-parser.add_argument(
-    "--optimizer",
-    type=str,
-    default="SGD",
-    choices=["SGD", "Adam"],
-    help="Choice of optimizer; (SGD or Adam; default: SGD)")
-parser.add_argument(
-    "--repeats",
-    type=int,
-    default=1,
-    help="MC dropout repeats")
-parser.add_argument(
-    "--dropout_rate",
-    type=float,
-    default=None,
-    help="MC dropout repeats")
 
-args = parser.parse_args()
-train_utils.set_up_jax(args.tpu_ip, args.use_float64)
+def get_args():
+    parser = argparse.ArgumentParser(description="Run SGD on a cloud TPU")
+    cmd_args_utils.add_common_flags(parser)
+    cmd_args_utils.add_sgd_flags(parser)
+    parser.add_argument(
+        "--optimizer",
+        type=str,
+        default="SGD",
+        choices=["SGD", "Adam"],
+        help="Choice of optimizer; (SGD or Adam; default: SGD)")
+    parser.add_argument(
+        "--repeats",
+        type=int,
+        default=1,
+        help="MC dropout repeats")
+    parser.add_argument(
+        "--dropout_rate",
+        type=float,
+        default=None,
+        help="MC dropout repeats")
+    return parser.parse_args()
 
 
 def get_optimizer(lr_schedule, args):
@@ -93,7 +94,7 @@ def get_dirname_tfwriter(args):
     return dirname, tf_writer
 
 
-def train_model():
+def train_model(args):
     # Initialize training directory
     dirname, tf_writer = get_dirname_tfwriter(args)
 
@@ -203,5 +204,7 @@ def train_model():
 
 
 if __name__ == "__main__":
+    cmd_args = get_args()
+    train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
     script_utils.print_visible_devices()
-    train_model()
+    train_model(cmd_args)
