@@ -28,7 +28,7 @@ config = [
     }
 ]
 
-num_repeats = 1
+num_repeats = 2
 num_ensemble_repeats = 3
 image_size = 64
 
