@@ -1,6 +1,5 @@
 import sys
 import os
-from git import Repo
 
 sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
