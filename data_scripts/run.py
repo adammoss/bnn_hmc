@@ -21,7 +21,7 @@ config = [
         'test': 'train[80%:]',
         'eval': 'test',
         'batch_size': 50,
-        'ensemble_epochs': 100,
+        'ensemble_epochs': 20,
         'subset_train_to': None,
         'scaling': None,
         'builder_kwargs': None,
