@@ -24,6 +24,7 @@ config = [
 
 num_repeats = 3
 num_ensemble_repeats = 10
+image_size = 64
 
 for c in config:
 
@@ -34,6 +35,10 @@ for c in config:
     cmd_args = get_sgd_args()
 
     cmd_args.dataset_name = c['dataset']
+    cmd_args.image_size = image_size
+    cmd_args.builder_kwargs = c['builder_kwargs']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
     cmd_args.model_name = c['model'] + '_dropout'
     cmd_args.train_split = c['train']
     cmd_args.test_split = c['test']
@@ -41,9 +46,6 @@ for c in config:
     cmd_args.weight_decay = 10
     cmd_args.init_step_size = 3e-7
     cmd_args.batch_size = c['batch_size']
-    cmd_args.scaling = c['scaling']
-    cmd_args.subset_train_to = c['subset_train_to']
-    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.num_epochs = 200
     cmd_args.patience = 10
     cmd_args.eval_freq = 5
