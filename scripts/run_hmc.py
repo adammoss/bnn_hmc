@@ -90,6 +90,7 @@ def get_dirname_tfwriter(cmd_args):
 
 
 def train_model(args):
+    print(args)
     """Trains model via HMC."""
     dirname, tf_writer = get_dirname_tfwriter(args)
 

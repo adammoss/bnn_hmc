@@ -86,6 +86,7 @@ def get_dirname_tfwriter(args):
 
 
 def train_model(args):
+    print(args)
     # Initialize training directory
     dirname, tf_writer = get_dirname_tfwriter(args)
 
