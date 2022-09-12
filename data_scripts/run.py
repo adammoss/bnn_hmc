@@ -9,8 +9,18 @@ from scripts.run_sgd import get_args as get_sgd_args
 
 config = [
     {
+        'dataset': 'slc/space',
+        'train': 'train[:80%]',
+        'test': 'train[80%:]',
+        'eval': 'test',
+        'batch_size': 50,
+        'ensemble_epochs': 100,
+        'subset_train_to': None,
+        'scaling': None,
+        'builder_kwargs': None,
+    },
+    {
         'dataset': 'mirabest/confident',
-        'model': 'lenet',
         'train': 'train[:80%]',
         'test': 'train[80%:]',
         'eval': 'test',
@@ -22,6 +32,7 @@ config = [
     }
 ]
 
+model = 'lenet'
 num_repeats = 3
 num_ensemble_repeats = 10
 image_size = 64
@@ -39,7 +50,7 @@ for c in config:
     cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.scaling = c['scaling']
     cmd_args.subset_train_to = c['subset_train_to']
-    cmd_args.model_name = c['model'] + '_dropout'
+    cmd_args.model_name = model + '_dropout'
     cmd_args.train_split = c['train']
     cmd_args.test_split = c['test']
 
