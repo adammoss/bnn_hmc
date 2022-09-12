@@ -132,6 +132,7 @@ for c in config:
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 5
     cmd_args.dropout_rate = 0.1
+    cmd_args.repeats = 10
     cmd_args.optimizer = 'SGD'
 
     for i in range(num_repeats):
