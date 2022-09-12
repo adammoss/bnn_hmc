@@ -125,7 +125,7 @@ for c in config:
     cmd_args.temperature = 1.0
     cmd_args.step_size = 3.0e-5
     cmd_args.trajectory_len = 0.1
-    cmd_args.num_iterations = 20
+    cmd_args.num_iterations = 50
     cmd_args.max_num_leapfrog_steps = 10000
     cmd_args.num_burn_in_iterations = 10
 
