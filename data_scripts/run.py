@@ -30,6 +30,7 @@ config = [
 
 num_repeats = 2
 num_ensemble_repeats = 3
+image_size = 64
 
 for c in config:
 
@@ -38,6 +39,10 @@ for c in config:
     script_utils.print_visible_devices()
 
     cmd_args.dataset_name = c['dataset']
+    cmd_args.image_size = image_size
+    cmd_args.builder_kwargs = c['builder_kwargs']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
     cmd_args.model_name = c['model']
     cmd_args.train_split = c['train']
     cmd_args.test_split = c['test']
@@ -51,9 +56,6 @@ for c in config:
     cmd_args.num_epochs = 200
     cmd_args.eval_freq = 5
     cmd_args.batch_size = c['batch_size']
-    cmd_args.scaling = c['scaling']
-    cmd_args.subset_train_to = c['subset_train_to']
-    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.patience = 10
     cmd_args.save_freq = 5
     cmd_args.optimizer = 'Adam'
@@ -75,6 +77,10 @@ for c in config:
     cmd_args = get_sgd_args()
 
     cmd_args.dataset_name = c['dataset']
+    cmd_args.image_size = image_size
+    cmd_args.builder_kwargs = c['builder_kwargs']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
     cmd_args.model_name = c['model']
     cmd_args.train_split = c['train']
     cmd_args.test_split = c['test']
@@ -83,9 +89,6 @@ for c in config:
     cmd_args.init_step_size = 3e-7
     cmd_args.num_epochs = c['ensemble_epochs']
     cmd_args.batch_size = c['batch_size']
-    cmd_args.scaling = c['scaling']
-    cmd_args.subset_train_to = c['subset_train_to']
-    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 5
     cmd_args.optimizer = 'SGD'
@@ -108,13 +111,15 @@ for c in config:
     cmd_args = get_hmc_args()
 
     cmd_args.dataset_name = c['dataset']
+    cmd_args.image_size = image_size
+    cmd_args.builder_kwargs = c['builder_kwargs']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
     cmd_args.model_name = c['model']
     cmd_args.train_split = c['train']
     # Compute ensemble predictions directly as we don't use early stopping
     cmd_args.test_split = c['eval']
 
-    cmd_args.scaling = c['scaling']
-    cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.weight_decay = 50
     cmd_args.temperature = 1.0
     cmd_args.step_size = 3.0e-5
