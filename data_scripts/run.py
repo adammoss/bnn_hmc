@@ -28,8 +28,8 @@ config = [
     }
 ]
 
-num_repeats = 3
-num_ensemble_repeats = 10
+num_repeats = 2
+num_ensemble_repeats = 3
 
 for c in config:
 
@@ -126,5 +126,5 @@ for c in config:
     for i in range(num_repeats):
         cmd_args.eval_split = None
         cmd_args.seed = i
-        cmd_args.dir = 'runs/mcd/%s/%s/' % (c['dataset'], i)
+        cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
         train_hmc_model(cmd_args)
