@@ -28,8 +28,8 @@ config = [
     }
 ]
 
-num_repeats = 2
-num_ensemble_repeats = 3
+num_repeats = 3
+num_ensemble_repeats = 5
 image_size = 64
 
 for c in config:
@@ -66,9 +66,9 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
 
     # SGD
 
@@ -133,4 +133,4 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
-        #train_hmc_model(cmd_args)
+        train_hmc_model(cmd_args)
