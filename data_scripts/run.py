@@ -57,7 +57,7 @@ for c in config:
     cmd_args.eval_freq = 5
     cmd_args.batch_size = c['batch_size']
     cmd_args.patience = 10
-    cmd_args.save_freq = 5
+    cmd_args.save_freq = 20
     cmd_args.optimizer = 'Adam'
     cmd_args.vi_sigma_init = 0.01
     cmd_args.vi_ensemble_size = 20
@@ -90,7 +90,7 @@ for c in config:
     cmd_args.num_epochs = c['ensemble_epochs']
     cmd_args.batch_size = c['batch_size']
     cmd_args.eval_freq = 5
-    cmd_args.save_freq = 5
+    cmd_args.save_freq = 20
     cmd_args.optimizer = 'SGD'
 
     for i in range(num_repeats):
