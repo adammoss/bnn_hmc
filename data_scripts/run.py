@@ -114,6 +114,7 @@ for c in config:
     print('Performing MCD')
 
     repo.git.checkout('dropout_wip')
+    time.sleep(5)
 
     cmd_args = get_sgd_args()
 
