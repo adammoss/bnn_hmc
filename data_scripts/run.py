@@ -16,17 +16,6 @@ from bnn_hmc.utils import script_utils
 
 config = [
     {
-        'dataset': 'slc/space',
-        'train': 'train[:80%]',
-        'test': 'train[80%:]',
-        'eval': 'test',
-        'batch_size': 50,
-        'ensemble_epochs': 20,
-        'subset_train_to': None,
-        'scaling': None,
-        'builder_kwargs': None,
-    },
-    {
         'dataset': 'mirabest/confident',
         'train': 'train[:80%]',
         'test': 'train[80%:]',
@@ -36,7 +25,24 @@ config = [
         'subset_train_to': None,
         'scaling': None,
         'builder_kwargs': None,
-    }
+        'ood': [{
+            'dataset': 'mirabest/uncertain',
+            'eval': 'test',
+        }]
+    },
+    {
+        'dataset': 'slc/space',
+        'train': 'train[:80%]',
+        'test': 'train[80%:]',
+        'eval': 'test',
+        'batch_size': 50,
+        'ensemble_epochs': 20,
+        'subset_train_to': None,
+        'scaling': None,
+        'builder_kwargs': None,
+        'ood_dataset': None,
+        'ood_split': None,
+    },
 ]
 
 model = 'lenet'
@@ -81,6 +87,15 @@ for c in config:
         train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
         train_vi_model(cmd_args)
+
+    for ood in c['ood']:
+        for i in range(num_repeats):
+            cmd_args.output_prefix = 'ood_%s_%s' % (ood['dataset'], ood['eval'])
+            cmd_args.dataset_name = ood['dataset']
+            cmd_args.eval_split = ood['eval']
+            cmd_args.seed = i
+            cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
+            train_vi_model(cmd_args)
 
     # SGD
 

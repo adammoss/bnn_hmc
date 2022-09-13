@@ -90,6 +90,10 @@ def add_common_flags(parser):
         default=None,
         help="Evaluation dataset")
     parser.add_argument(
+        "--output_prefix",
+        type=str,
+        default=None)
+    parser.add_argument(
         "--scaling",
         type=str,
         default=None,

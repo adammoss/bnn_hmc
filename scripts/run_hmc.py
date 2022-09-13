@@ -163,9 +163,14 @@ def train_model(args):
         else:
             ensemble_stats = {}
 
-        onp.save(os.path.join(dirname, 'predictions.npy'), ensemble_predictions)
-        onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
-        onp.save(os.path.join(dirname, 'metrics.npy'), ensemble_stats)
+        if args.output_prefix is not None:
+            onp.save(os.path.join(dirname, args.output_prefix + '_predictions.npy'), ensemble_predictions)
+            onp.save(os.path.join(dirname, args.output_prefix + '_test_set.npy'), test_set[1])
+            onp.save(os.path.join(dirname, args.output_prefix + '_metrics.npy'), ensemble_stats)
+        else:
+            onp.save(os.path.join(dirname, 'predictions.npy'), ensemble_predictions)
+            onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
+            onp.save(os.path.join(dirname, 'metrics.npy'), ensemble_stats)
 
         # Save the checkpoint
         checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration)

@@ -209,9 +209,14 @@ def train_model(args):
                 predict_fn(net_apply, params, net_state, test_set))
             test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
                                                       metrics_fns)
-            onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)
-            onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
-            onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
+            if args.output_prefix is not None:
+                onp.save(os.path.join(dirname, args.output_prefix + '_predictions.npy'), test_predictions)
+                onp.save(os.path.join(dirname, args.output_prefix + '_test_set.npy'), test_set[1])
+                onp.save(os.path.join(dirname, args.output_prefix + '_metrics.npy'), test_stats)
+            else:
+                onp.save(os.path.join(dirname, 'predictions.npy'), test_predictions)
+                onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
+                onp.save(os.path.join(dirname, 'metrics.npy'), test_stats)
             print(test_stats)
 
 
