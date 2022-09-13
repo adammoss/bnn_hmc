@@ -57,7 +57,7 @@ def get_args():
         type=str,
         default="Adam",
         choices=["SGD", "Adam"],
-        help="Choice of optimizer; (SGD or Adam; default: SGD)")
+        help="Choice of optimizer; (SGD or Adam; default: Adam)")
     parser.add_argument(
         "--vi_sigma_init",
         type=float,

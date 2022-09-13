@@ -37,7 +37,7 @@ config = [
         'eval': 'test',
         'batch_size': 50,
         'ensemble_epochs': 20,
-        'subset_train_to': None,
+        'subset_train_to': 1000,
         'scaling': None,
         'builder_kwargs': None,
         'ood_dataset': None,

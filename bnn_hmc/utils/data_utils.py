@@ -57,6 +57,7 @@ class ImgDatasets(Enum):
     MNIST = "mnist"
     MIRABEST_ALL = "mirabest/all"
     MIRABEST_CONFIDENT = "mirabest/confident"
+    MIRABEST_UNCERTAIN = "mirabest/uncertain"
     MLSST_Y1 = "mlsst/Y1"
     MLSST_Y10 = "mlsst/Y10"
     SLC_SPACE = "slc/space"
@@ -101,6 +102,7 @@ _ALL_IMG_DS_STATS = {
     ImgDatasets.MNIST: ((0.1307,), (0.3081,)),
     ImgDatasets.MIRABEST_ALL: ((0.003089,), (0.03499,)),
     ImgDatasets.MIRABEST_CONFIDENT: ((0.003089,), (0.03499,)),
+    ImgDatasets.MIRABEST_UNCERTAIN: ((0.003089,), (0.03499,)),
     ImgDatasets.MLSST_Y1: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
     ImgDatasets.MLSST_Y10: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
     ImgDatasets.SLC_SPACE: ((4.3368458e-13,), (5.503901e-12,)),
