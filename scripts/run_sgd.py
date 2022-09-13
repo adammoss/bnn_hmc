@@ -195,11 +195,19 @@ def train_model(args):
             ensemble_stats = train_utils.evaluate_metrics(ensemble_predictions,
                                                           test_set[1], metrics_fns)
             num_ensembled += 1
-            onp.save(os.path.join(dirname, 'predictions_%s.npy' % i), test_predictions)
+            if args.output_prefix is not None:
+                onp.save(os.path.join(dirname, args.output_prefix + '_predictions_%s.npy' % i), test_predictions)
+            else:
+                onp.save(os.path.join(dirname, 'predictions_%s.npy' % i), test_predictions)
 
-        onp.save(os.path.join(dirname, 'ensemble_predictions.npy'), ensemble_predictions)
-        onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
-        onp.save(os.path.join(dirname, 'ensemble_metrics.npy'), ensemble_stats)
+        if args.output_prefix is not None:
+            onp.save(os.path.join(dirname, args.output_prefix + '_ensemble_predictions.npy'), ensemble_predictions)
+            onp.save(os.path.join(dirname, args.output_prefix + '_test_set.npy'), test_set[1])
+            onp.save(os.path.join(dirname, args.output_prefix + '_ensemble_metrics.npy'), ensemble_stats)
+        else:
+            onp.save(os.path.join(dirname, 'ensemble_predictions.npy'), ensemble_predictions)
+            onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
+            onp.save(os.path.join(dirname, 'ensemble_metrics.npy'), ensemble_stats)
         print(ensemble_stats)
 
 
