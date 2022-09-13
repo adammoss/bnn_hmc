@@ -9,25 +9,33 @@ from scripts.run_sgd import get_args as get_sgd_args
 
 config = [
     {
-        'dataset': 'slc/space',
-        'train': 'train[:80%]',
-        'test': 'train[80%:]',
-        'eval': 'test',
-        'batch_size': 50,
-        'subset_train_to': None,
-        'scaling': None,
-        'builder_kwargs': None,
-    },
-    {
         'dataset': 'mirabest/confident',
         'train': 'train[:80%]',
         'test': 'train[80%:]',
         'eval': 'test',
         'batch_size': 53,
+        'ensemble_epochs': 100,
         'subset_train_to': None,
         'scaling': None,
         'builder_kwargs': None,
-    }
+        'ood': [{
+            'dataset': 'mirabest/uncertain',
+            'eval': 'test',
+        }]
+    },
+    {
+        'dataset': 'slc/space',
+        'train': 'train[:80%]',
+        'test': 'train[80%:]',
+        'eval': 'test',
+        'batch_size': 50,
+        'ensemble_epochs': 20,
+        'subset_train_to': None,
+        'scaling': None,
+        'builder_kwargs': None,
+        'ood_dataset': None,
+        'ood_split': None,
+    },
 ]
 
 model = 'lenet'
