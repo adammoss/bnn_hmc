@@ -28,6 +28,7 @@ config = [
         'ood': [{
             'dataset': 'mirabest/uncertain',
             'eval': 'test',
+            'builder_kwargs': None,
         }]
     },
     {
@@ -40,9 +41,41 @@ config = [
         'subset_train_to': 1000,
         'scaling': None,
         'builder_kwargs': None,
-        'ood_dataset': None,
-        'ood_split': None,
+        'ood': []
     },
+    {
+        'dataset': 'mlsst/Y10',
+        'train': 'train',
+        'test': 'validation',
+        'eval': 'test',
+        'batch_size': 50,
+        'ensemble_epochs': 100,
+        'subset_train_to': 1000,
+        'scaling': 'asinh',
+        'builder_kwargs': None,
+        'ood': [{
+            'dataset': 'mlsst/Y1',
+            'eval': 'test',
+            'builder_kwargs': None,
+        }]
+    },
+    {
+        'dataset': 'cmd',
+        'train': 'train[:90%]',
+        'test': 'train[90%:95%]',
+        'eval': 'train[95%:]',
+        'batch_size': 50,
+        'ensemble_epochs': 100,
+        'subset_train_to': 1000,
+        'scaling': 'asinh',
+        'builder_kwargs': '{"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]}',
+        'ood': [{
+            'dataset': 'mlsst/Y1',
+            'eval': 'test',
+            'builder_kwargs': '{"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]}',
+        }]
+    },
+
 ]
 
 model = 'lenet'
@@ -93,6 +126,7 @@ for c in config:
             output_prefix = 'ood_%s_%s' % (ood['dataset'], ood['eval'])
             cmd_args.output_prefix = output_prefix.replace('/', '_')
             cmd_args.dataset_name = ood['dataset']
+            cmd_args.builder_kwargs = ood['builder_kwargs']
             cmd_args.eval_split = ood['eval']
             cmd_args.seed = i
             cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
