@@ -36,6 +36,7 @@ import argparse
 import functools
 import tqdm
 import sys
+import ast
 
 sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
@@ -131,8 +132,14 @@ def run_visualization(args):
     cmd_args_utils.save_cmd(dirname, None)
 
     dtype = jnp.float64 if args.use_float64 else jnp.float32
+    if args.builder_kwargs is not None:
+        builder_kwargs = ast.literal_eval(args.builder_kwargs)
+    else:
+        builder_kwargs = {}
     train_set, test_set, task, data_info = data_utils.make_ds_pmap_fullbatch(
-        args.dataset_name, dtype)
+        args.dataset_name, dtype, truncate_to=args.subset_train_to, train_split=args.train_split,
+        test_split=args.eval_split, scaling=args.scaling, image_size=args.image_size,
+        builder_kwargs=builder_kwargs)
 
     net_apply, net_init = models.get_model(args.model_name, data_info)
     net_apply = precision_utils.rewrite_high_precision(net_apply)
