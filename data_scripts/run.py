@@ -90,7 +90,8 @@ for c in config:
 
     for ood in c['ood']:
         for i in range(num_repeats):
-            cmd_args.output_prefix = 'ood_%s_%s' % (ood['dataset'], ood['eval'])
+            output_prefix = 'ood_%s_%s' % (ood['dataset'], ood['eval'])
+            cmd_args.output_prefix = output_prefix.replace('/', '_')
             cmd_args.dataset_name = ood['dataset']
             cmd_args.eval_split = ood['eval']
             cmd_args.seed = i
