@@ -219,13 +219,13 @@ for c in config:
         checkpoint2 = None
         checkpoint3 = None
         cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
-        for file in glob.glob('runs/hmc/%s/%s/*.pt' % (c['dataset'], i)):
-            if '_10.pt' in file:
-                checkpoint1 = file
-            if '_25.pt' in file:
-                checkpoint2 = file
-            if '_40.pt' in file:
-                checkpoint3 = file
+        for filename in glob.glob('runs/hmc/%s/%s/*.pt' % (c['dataset'], i)):
+            if '_10.pt' in filename:
+                checkpoint1 = filename
+            if '_25.pt' in filename:
+                checkpoint2 = filename
+            if '_40.pt' in filename:
+                checkpoint3 = filename
             if checkpoint1 is not None and checkpoint2 is not None and checkpoint3 is not None:
                 cmd_args.checkpoint1 = checkpoint1
                 cmd_args.checkpoint2 = checkpoint2
