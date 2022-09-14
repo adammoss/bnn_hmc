@@ -82,7 +82,7 @@ config = [
 ]
 
 model = 'lenet'
-num_repeats = 3
+num_repeats = 1
 num_ensemble_repeats = 5
 image_size = 64
 
@@ -122,7 +122,7 @@ for c in config:
         cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
         train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
-        train_vi_model(cmd_args)
+        #train_vi_model(cmd_args)
 
     for ood in c['ood']:
         for i in range(num_repeats):
@@ -133,7 +133,7 @@ for c in config:
             cmd_args.eval_split = ood['eval']
             cmd_args.seed = i
             cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
-            train_vi_model(cmd_args)
+            #train_vi_model(cmd_args)
 
     # SGD
 
@@ -164,11 +164,11 @@ for c in config:
             cmd_args.eval_split = None
             cmd_args.seed = i*num_ensemble_repeats + j
             cmd_args.dir = 'runs/sgd/%s/%s/%s/' % (c['dataset'], i, j)
-            train_sgd_model(cmd_args)
+            #train_sgd_model(cmd_args)
             cmd_args.eval_split = c['eval']
-            train_sgd_model(cmd_args)
+            #train_sgd_model(cmd_args)
         cmd_args.ensemble_root = 'runs/sgd/%s/%s/*/*' % (c['dataset'], i)
-        train_sgd_model(cmd_args)
+        #train_sgd_model(cmd_args)
 
     # HMC
 
@@ -226,8 +226,8 @@ for c in config:
                 checkpoint2 = filename
             if '_40.pt' in filename:
                 checkpoint3 = filename
-            if checkpoint1 is not None and checkpoint2 is not None and checkpoint3 is not None:
-                cmd_args.checkpoint1 = checkpoint1
-                cmd_args.checkpoint2 = checkpoint2
-                cmd_args.checkpoint3 = checkpoint3
-                run_visualization(cmd_args)
+        if checkpoint1 is not None and checkpoint2 is not None and checkpoint3 is not None:
+            cmd_args.checkpoint1 = checkpoint1
+            cmd_args.checkpoint2 = checkpoint2
+            cmd_args.checkpoint3 = checkpoint3
+            run_visualization(cmd_args)
