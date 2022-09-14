@@ -120,7 +120,7 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
-        train_vi_model(cmd_args)
+        #train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
         #train_vi_model(cmd_args)
 
