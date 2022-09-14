@@ -89,17 +89,14 @@ def get_args():
     parser.add_argument(
         "--checkpoint1",
         type=str,
-        required=True,
         help="Path to the first checkpoint")
     parser.add_argument(
         "--checkpoint2",
         type=str,
-        required=True,
         help="Path to the second checkpoint")
     parser.add_argument(
         "--checkpoint3",
         type=str,
-        required=True,
         help="Path to the third checkpoint")
     parser.add_argument(
         "--plot",
