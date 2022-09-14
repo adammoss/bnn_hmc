@@ -60,31 +60,31 @@ def get_args():
     parser.add_argument(
         "--limit_bottom",
         type=float,
-        default=-0.25,
+        default=-0.75,
         help="Limit of the loss surface visualization along the"
              "vertical direction at the bottom")
     parser.add_argument(
         "--limit_top",
         type=float,
-        default=1.25,
+        default=1.75,
         help="Limit of the loss surface visualization along the"
              "vertical direction at the top")
     parser.add_argument(
         "--limit_left",
         type=float,
-        default=-0.25,
+        default=-0.75,
         help="Limit of the loss surface visualization along the"
              "horizontal direction on the left")
     parser.add_argument(
         "--limit_right",
         type=float,
-        default=1.25,
+        default=1.75,
         help="Limit of the loss surface visualization along the"
              "horizontal direction on the right")
     parser.add_argument(
         "--grid_size",
         type=int,
-        default=20,
+        default=50,
         help="Number of grid points in each direction")
     parser.add_argument(
         "--checkpoint1",

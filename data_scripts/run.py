@@ -1,9 +1,12 @@
 import sys
 import os
+import glob
 
 sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
 
+from scripts.make_posterior_surface_plot import run_visualization
+from scripts.make_posterior_surface_plot import get_args as get_visualization_args
 from scripts.run_sgd import train_model as train_sgd_model
 from scripts.run_sgd import get_args as get_sgd_args
 from scripts.run_hmc import train_model as train_hmc_model
@@ -70,8 +73,8 @@ config = [
         'scaling': 'asinh',
         'builder_kwargs': '{"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]}',
         'ood': [{
-            'dataset': 'mlsst/Y1',
-            'eval': 'test',
+            'dataset': 'cmd',
+            'eval': 'train[95%:]',
             'builder_kwargs': '{"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]}',
         }]
     },
@@ -196,3 +199,35 @@ for c in config:
         cmd_args.seed = i
         cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
         train_hmc_model(cmd_args)
+
+    cmd_args = get_visualization_args()
+
+    cmd_args.dataset_name = c['dataset']
+    cmd_args.image_size = image_size
+    cmd_args.builder_kwargs = c['builder_kwargs']
+    cmd_args.scaling = c['scaling']
+    cmd_args.subset_train_to = c['subset_train_to']
+    cmd_args.model_name = model
+    cmd_args.train_split = c['train']
+    cmd_args.eval_split = c['eval']
+
+    cmd_args.weight_decay = 50
+    cmd_args.temperature = 1.0
+
+    for i in range(num_repeats):
+        checkpoint1 = None
+        checkpoint2 = None
+        checkpoint3 = None
+        cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
+        for file in glob.glob('runs/hmc/%s/%s/*.pt' % (c['dataset'], i)):
+            if '_10.pt' in file:
+                checkpoint1 = file
+            if '_25.pt' in file:
+                checkpoint2 = file
+            if '_40.pt' in file:
+                checkpoint3 = file
+            if checkpoint1 is not None and checkpoint2 is not None and checkpoint3 is not None:
+                cmd_args.checkpoint1 = checkpoint1
+                cmd_args.checkpoint2 = checkpoint2
+                cmd_args.checkpoint3 = checkpoint3
+                run_visualization(cmd_args)
