@@ -190,7 +190,7 @@ for c in config:
     cmd_args.temperature = 1.0
     cmd_args.step_size = 3.0e-5
     cmd_args.trajectory_len = 0.1
-    cmd_args.num_iterations = 50
+    cmd_args.num_iterations = 5
     cmd_args.max_num_leapfrog_steps = 10000
     cmd_args.num_burn_in_iterations = 10
 
@@ -220,11 +220,11 @@ for c in config:
         checkpoint3 = None
         cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
         for filename in glob.glob('runs/hmc/%s/%s/*.pt' % (c['dataset'], i)):
-            if '_10.pt' in filename:
+            if '_1.pt' in filename:
                 checkpoint1 = filename
-            if '_25.pt' in filename:
+            if '_2.pt' in filename:
                 checkpoint2 = filename
-            if '_40.pt' in filename:
+            if '_3.pt' in filename:
                 checkpoint3 = filename
         if checkpoint1 is not None and checkpoint2 is not None and checkpoint3 is not None:
             cmd_args.checkpoint1 = checkpoint1
