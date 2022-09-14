@@ -82,7 +82,7 @@ config = [
 ]
 
 model = 'lenet'
-num_repeats = 1
+num_repeats = 3
 num_ensemble_repeats = 5
 image_size = 64
 
@@ -120,9 +120,9 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
         cmd_args.eval_split = c['eval']
-        #train_vi_model(cmd_args)
+        train_vi_model(cmd_args)
 
     for ood in c['ood']:
         for i in range(num_repeats):
@@ -133,7 +133,7 @@ for c in config:
             cmd_args.eval_split = ood['eval']
             cmd_args.seed = i
             cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
-            #train_vi_model(cmd_args)
+            train_vi_model(cmd_args)
 
     # SGD
 
@@ -164,11 +164,11 @@ for c in config:
             cmd_args.eval_split = None
             cmd_args.seed = i*num_ensemble_repeats + j
             cmd_args.dir = 'runs/sgd/%s/%s/%s/' % (c['dataset'], i, j)
-            #train_sgd_model(cmd_args)
+            train_sgd_model(cmd_args)
             cmd_args.eval_split = c['eval']
-            #train_sgd_model(cmd_args)
+            train_sgd_model(cmd_args)
         cmd_args.ensemble_root = 'runs/sgd/%s/%s/*/*' % (c['dataset'], i)
-        #train_sgd_model(cmd_args)
+        train_sgd_model(cmd_args)
 
     # HMC
 
@@ -190,7 +190,7 @@ for c in config:
     cmd_args.temperature = 1.0
     cmd_args.step_size = 3.0e-5
     cmd_args.trajectory_len = 0.1
-    cmd_args.num_iterations = 5
+    cmd_args.num_iterations = 50
     cmd_args.max_num_leapfrog_steps = 10000
     cmd_args.num_burn_in_iterations = 10
 
@@ -220,11 +220,11 @@ for c in config:
         checkpoint3 = None
         cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
         for filename in glob.glob('runs/hmc/%s/%s/*.pt' % (c['dataset'], i)):
-            if '_1.pt' in filename:
+            if '_10.pt' in filename:
                 checkpoint1 = filename
-            if '_2.pt' in filename:
+            if '_25.pt' in filename:
                 checkpoint2 = filename
-            if '_3.pt' in filename:
+            if '_40.pt' in filename:
                 checkpoint3 = filename
         if checkpoint1 is not None and checkpoint2 is not None and checkpoint3 is not None:
             cmd_args.checkpoint1 = checkpoint1
