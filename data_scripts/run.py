@@ -41,7 +41,7 @@ config = [
         'eval': 'test',
         'batch_size': 50,
         'ensemble_epochs': 20,
-        'subset_train_to': 1000,
+        'subset_train_to': None,
         'scaling': None,
         'builder_kwargs': None,
         'ood': []
@@ -53,7 +53,7 @@ config = [
         'eval': 'test',
         'batch_size': 50,
         'ensemble_epochs': 100,
-        'subset_train_to': 1000,
+        'subset_train_to': 20000,
         'scaling': 'asinh',
         'builder_kwargs': None,
         'ood': [{
@@ -69,7 +69,7 @@ config = [
         'eval': 'train[95%:]',
         'batch_size': 50,
         'ensemble_epochs': 100,
-        'subset_train_to': 1000,
+        'subset_train_to': None,
         'scaling': 'asinh',
         'builder_kwargs': '{"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]}',
         'ood': [{
