@@ -1,3 +1,5 @@
+# Prebuild datasets in case of issues during training
+
 import sys
 import os
 
