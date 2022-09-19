@@ -29,22 +29,6 @@ config = [
         'optimizer': 'SGD'
     },
     {
-        'dataset': 'mlsst/Y10',
-        'train': 'train',
-        'test': 'validation',
-        'eval': 'test',
-        'batch_size': 50,
-        'subset_train_to': 20000,
-        'scaling': 'asinh',
-        'builder_kwargs': None,
-        'ood': [{
-            'dataset': 'mlsst/Y1',
-            'eval': 'test',
-            'builder_kwargs': None,
-        }],
-        'optimizer': 'Adam'
-    },
-    {
         'dataset': 'cmd',
         'train': 'train[:90%]',
         'test': 'train[90%:95%]',
@@ -59,5 +43,21 @@ config = [
             'builder_kwargs': {"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]},
         }],
         'optimizer': 'SGD'
+    },
+    {
+        'dataset': 'mlsst/Y10',
+        'train': 'train',
+        'test': 'validation',
+        'eval': 'test',
+        'batch_size': 50,
+        'subset_train_to': 20000,
+        'scaling': 'asinh',
+        'builder_kwargs': None,
+        'ood': [{
+            'dataset': 'mlsst/Y1',
+            'eval': 'test',
+            'builder_kwargs': None,
+        }],
+        'optimizer': 'Adam'
     },
 ]
