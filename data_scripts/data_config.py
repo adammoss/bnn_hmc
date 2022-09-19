@@ -5,7 +5,6 @@ config = [
         'test': 'train[80%:]',
         'eval': 'test',
         'batch_size': 53,
-        'ensemble_epochs': 100,
         'subset_train_to': None,
         'scaling': None,
         'builder_kwargs': None,
@@ -13,7 +12,8 @@ config = [
             'dataset': 'mirabest/uncertain',
             'eval': 'test',
             'builder_kwargs': None,
-        }]
+        }],
+        'optimizer': 'SGD'
     },
     {
         'dataset': 'slc/space',
@@ -25,7 +25,8 @@ config = [
         'subset_train_to': None,
         'scaling': None,
         'builder_kwargs': None,
-        'ood': []
+        'ood': [],
+        'optimizer': 'SGD'
     },
     {
         'dataset': 'mlsst/Y10',
@@ -33,7 +34,6 @@ config = [
         'test': 'validation',
         'eval': 'test',
         'batch_size': 50,
-        'ensemble_epochs': 100,
         'subset_train_to': 20000,
         'scaling': 'asinh',
         'builder_kwargs': None,
@@ -41,7 +41,8 @@ config = [
             'dataset': 'mlsst/Y1',
             'eval': 'test',
             'builder_kwargs': None,
-        }]
+        }],
+        'optimizer': 'Adam'
     },
     {
         'dataset': 'cmd',
@@ -49,7 +50,6 @@ config = [
         'test': 'train[90%:95%]',
         'eval': 'train[95%:]',
         'batch_size': 50,
-        'ensemble_epochs': 100,
         'subset_train_to': None,
         'scaling': 'asinh',
         'builder_kwargs': {"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]},
@@ -57,6 +57,7 @@ config = [
             'dataset': 'cmd',
             'eval': 'train[95%:]',
             'builder_kwargs': {"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]},
-        }]
+        }],
+        'optimizer': 'SGD'
     },
 ]
