@@ -6,6 +6,8 @@ sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
 
 from scripts.run_sgd import train_model as train_sgd_model
 from scripts.run_sgd import get_args as get_sgd_args
+from bnn_hmc.utils import train_utils
+from bnn_hmc.utils import script_utils
 from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats
 
 print('Performing MCD')
@@ -13,6 +15,8 @@ print('Performing MCD')
 for c in config:
 
     cmd_args = get_sgd_args()
+    train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
+    script_utils.print_visible_devices()
 
     cmd_args.dataset_name = c['dataset']
     cmd_args.image_size = image_size
