@@ -9,7 +9,7 @@ config = [
         'train': 'train[:80%]',
         'test': 'train[80%:]',
         'eval': 'test',
-        'batch_size': 106,
+        'batch_size': 53,
         'subset_train_to': None,
         'scaling': None,
         'builder_kwargs': None,
