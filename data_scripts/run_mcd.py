@@ -35,10 +35,7 @@ for c in config:
     cmd_args.save_freq = 20
     cmd_args.dropout_rate = 0.1
     cmd_args.repeats = num_ensemble_repeats
-    if c['optimizer'] == 'SGD':
-        cmd_args.init_step_size = 1e-7
-    else:
-        cmd_args.init_step_size = 1e-5
+    cmd_args.init_step_size = c['step_size']
     cmd_args.optimizer = c['optimizer']
 
     for i in range(num_repeats):

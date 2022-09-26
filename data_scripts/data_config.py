@@ -18,7 +18,8 @@ config = [
             'eval': 'test',
             'builder_kwargs': None,
         }],
-        'optimizer': 'SGD'
+        'optimizer': 'SGD',
+        'step_size': 3e-7,
     },
     {
         'dataset': 'slc/space',
@@ -31,7 +32,8 @@ config = [
         'scaling': None,
         'builder_kwargs': None,
         'ood': [],
-        'optimizer': 'SGD'
+        'optimizer': 'SGD',
+        'step_size': 3e-7,
     },
     {
         'dataset': 'cmd',
@@ -47,7 +49,8 @@ config = [
             'eval': 'train[95%:]',
             'builder_kwargs': '{"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]}',
         }],
-        'optimizer': 'SGD'
+        'optimizer': 'SGD',
+        'step_size': 1e-7,
     },
     {
         'dataset': 'mlsst/Y10',
@@ -63,6 +66,7 @@ config = [
             'eval': 'test',
             'builder_kwargs': None,
         }],
-        'optimizer': 'Adam'
+        'optimizer': 'Adam',
+        'step_size': 1e-5,
     },
 ]
