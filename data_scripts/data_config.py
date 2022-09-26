@@ -41,11 +41,11 @@ config = [
         'batch_size': 50,
         'subset_train_to': None,
         'scaling': 'asinh',
-        'builder_kwargs': {"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]},
+        'builder_kwargs': '{"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]}',
         'ood': [{
             'dataset': 'cmd',
             'eval': 'train[95%:]',
-            'builder_kwargs': {"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]},
+            'builder_kwargs': '{"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]}',
         }],
         'optimizer': 'SGD'
     },
