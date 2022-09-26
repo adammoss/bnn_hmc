@@ -28,10 +28,7 @@ for c in config:
     cmd_args.test_split = c['test']
 
     cmd_args.weight_decay = 10
-    if c['optimizer'] == 'SGD':
-        cmd_args.init_step_size = 3e-7
-    else:
-        cmd_args.init_step_size = 1e-5
+    cmd_args.init_step_size = c['step_size']
     cmd_args.num_epochs = 300
     cmd_args.patience = 20
     cmd_args.batch_size = c['batch_size']
