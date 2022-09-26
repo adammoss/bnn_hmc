@@ -33,10 +33,10 @@ for c in config:
 
     cmd_args.weight_decay = 50
     cmd_args.temperature = 1.0
-    cmd_args.step_size = 1.0e-5
+    cmd_args.step_size = 3.0e-5
     cmd_args.trajectory_len = 0.1
     cmd_args.num_iterations = 50
-    cmd_args.max_num_leapfrog_steps = 30000
+    cmd_args.max_num_leapfrog_steps = 10000
     cmd_args.num_burn_in_iterations = 10
 
     for i in range(num_repeats):
