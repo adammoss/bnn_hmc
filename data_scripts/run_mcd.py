@@ -6,48 +6,11 @@ sys.path.append(os.path.join(os.getcwd(), 'bnn_hmc'))
 
 from scripts.run_sgd import train_model as train_sgd_model
 from scripts.run_sgd import get_args as get_sgd_args
+from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats
 
-config = [
-    {
-        'dataset': 'mirabest/confident',
-        'train': 'train[:80%]',
-        'test': 'train[80%:]',
-        'eval': 'test',
-        'batch_size': 53,
-        'ensemble_epochs': 100,
-        'subset_train_to': None,
-        'scaling': None,
-        'builder_kwargs': None,
-        'ood': [{
-            'dataset': 'mirabest/uncertain',
-            'eval': 'test',
-        }]
-    },
-    {
-        'dataset': 'slc/space',
-        'train': 'train[:80%]',
-        'test': 'train[80%:]',
-        'eval': 'test',
-        'batch_size': 50,
-        'ensemble_epochs': 20,
-        'subset_train_to': None,
-        'scaling': None,
-        'builder_kwargs': None,
-        'ood_dataset': None,
-        'ood_split': None,
-    },
-]
-
-model = 'lenet'
-num_repeats = 3
-num_ensemble_repeats = 10
-image_size = 64
+print('Performing MCD')
 
 for c in config:
-
-    # MCD
-
-    print('Performing MCD')
 
     cmd_args = get_sgd_args()
 
@@ -61,7 +24,6 @@ for c in config:
     cmd_args.test_split = c['test']
 
     cmd_args.weight_decay = 10
-    cmd_args.init_step_size = 3e-7
     cmd_args.batch_size = c['batch_size']
     cmd_args.num_epochs = 200
     cmd_args.patience = 10
@@ -69,7 +31,11 @@ for c in config:
     cmd_args.save_freq = 20
     cmd_args.dropout_rate = 0.1
     cmd_args.repeats = num_ensemble_repeats
-    cmd_args.optimizer = 'SGD'
+    if c['optimizer'] == 'SGD':
+        cmd_args.init_step_size = 3e-7
+    else:
+        cmd_args.init_step_size = 1e-5
+    cmd_args.optimizer = c['optimizer']
 
     for i in range(num_repeats):
         cmd_args.eval_split = None
