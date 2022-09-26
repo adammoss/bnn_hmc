@@ -13,6 +13,8 @@ print('Performing Deep Ensembles')
 for c in config:
 
     cmd_args = get_sgd_args()
+    train_utils.set_up_jax(cmd_args.tpu_ip, cmd_args.use_float64)
+    script_utils.print_visible_devices()
 
     cmd_args.dataset_name = c['dataset']
     cmd_args.image_size = image_size
