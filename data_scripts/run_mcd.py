@@ -42,9 +42,10 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/mcd/%s/%s/' % (c['dataset'], i)
-        train_sgd_model(cmd_args)
-        cmd_args.eval_split = c['eval']
-        train_sgd_model(cmd_args)
+        if not os.path.isdir(cmd_args.dir):
+            train_sgd_model(cmd_args)
+            cmd_args.eval_split = c['eval']
+            train_sgd_model(cmd_args)
 
     for ood in c['ood']:
         for i in range(num_repeats):
@@ -55,4 +56,5 @@ for c in config:
             cmd_args.eval_split = ood['eval']
             cmd_args.seed = i
             cmd_args.dir = 'runs/mcd/%s/%s/' % (c['dataset'], i)
-            train_sgd_model(cmd_args)
+            if not os.path.isdir(cmd_args.dir):
+                train_sgd_model(cmd_args)
