@@ -66,7 +66,7 @@ config = [
             'eval': 'test',
             'builder_kwargs': None,
         }],
-        'optimizer': 'Adam',
-        'step_size': 1e-5,
+        'optimizer': 'SGD',
+        'step_size': 3e-7,
     },
 ]
