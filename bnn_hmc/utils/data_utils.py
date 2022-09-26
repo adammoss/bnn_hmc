@@ -103,8 +103,8 @@ _ALL_IMG_DS_STATS = {
     ImgDatasets.MIRABEST_ALL: ((0.003089,), (0.03499,)),
     ImgDatasets.MIRABEST_CONFIDENT: ((0.003089,), (0.03499,)),
     ImgDatasets.MIRABEST_UNCERTAIN: ((0.003089,), (0.03499,)),
-    ImgDatasets.MLSST_Y1: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
-    ImgDatasets.MLSST_Y10: ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),
+    ImgDatasets.MLSST_Y1: ((0.607727, 0.8723889, 0.8597939), (7.4772835, 8.003132, 7.9660645)),
+    ImgDatasets.MLSST_Y10: ((0.607727, 0.8723889, 0.8597939), (7.4772835, 8.003132, 7.9660645)),
     ImgDatasets.SLC_SPACE: ((4.3368458e-13,), (5.503901e-12,)),
     ImgRegDatasets.CMD: ((26.0,), (1.0,)),
 }

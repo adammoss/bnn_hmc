@@ -29,8 +29,8 @@ for c in config:
 
     cmd_args.weight_decay = 10
     cmd_args.batch_size = c['batch_size']
-    cmd_args.num_epochs = 200
-    cmd_args.patience = 10
+    cmd_args.num_epochs = 300
+    cmd_args.patience = 50
     cmd_args.eval_freq = 5
     cmd_args.save_freq = 20
     cmd_args.dropout_rate = 0.1
