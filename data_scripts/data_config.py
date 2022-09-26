@@ -1,3 +1,8 @@
+model = 'lenet'
+num_repeats = 3
+num_ensemble_repeats = 5
+image_size = 64
+
 config = [
     {
         'dataset': 'mirabest/confident',
