@@ -9,6 +9,8 @@ from scripts.make_posterior_surface_plot import run_visualization
 from scripts.make_posterior_surface_plot import get_args as get_visualization_args
 from scripts.run_hmc import train_model as train_hmc_model
 from scripts.run_hmc import get_args as get_hmc_args
+from bnn_hmc.utils import train_utils
+from bnn_hmc.utils import script_utils
 from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats
 
 print('Performing HMC')
