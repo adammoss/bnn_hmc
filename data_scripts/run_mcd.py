@@ -27,6 +27,15 @@ for c in config:
     cmd_args.train_split = c['train']
     cmd_args.test_split = c['test']
 
+
+"""
+!python3 bnn_hmc/scripts/run_sgd.py --seed=0 --weight_decay=10 --dir=runs/sgd/cmd/ \
+--dataset_name=cmd --scaling=asinh --builder_kwargs='{"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]}' \
+--model_name=lenet_dropout --init_step_size=1e-7 --num_epochs=100 --eval_freq=5 \
+--batch_size=100 --image_size 64 --save_freq=5 --optimizer=SGD --train_split=train[:90%] --test_split=train[90%:95%] \
+--patience 50 --dropout_rate 0.1
+"""
+
     cmd_args.weight_decay = 10
     cmd_args.batch_size = c['batch_size']
     cmd_args.num_epochs = 300
@@ -36,7 +45,7 @@ for c in config:
     cmd_args.dropout_rate = 0.1
     cmd_args.repeats = num_ensemble_repeats
     if c['optimizer'] == 'SGD':
-        cmd_args.init_step_size = 3e-7
+        cmd_args.init_step_size = 1e-7
     else:
         cmd_args.init_step_size = 1e-5
     cmd_args.optimizer = c['optimizer']
