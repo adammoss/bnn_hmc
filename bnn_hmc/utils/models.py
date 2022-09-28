@@ -70,6 +70,33 @@ def make_lenet5_fn(data_info):
   return lenet_fn
 
 
+def make_lenet5_fn_swish(data_info):
+  num_classes = data_info["num_classes"]
+
+  def lenet_fn_swish(batch, is_training):
+    """Network inspired by LeNet-5."""
+    x, _ = batch
+
+    cnn = hk.Sequential([
+        hk.Conv2D(output_channels=6, kernel_shape=5, padding="SAME"),
+        jax.nn.swish,
+        hk.MaxPool(window_shape=3, strides=2, padding="VALID"),
+        hk.Conv2D(output_channels=16, kernel_shape=5, padding="SAME"),
+        jax.nn.swish,
+        hk.MaxPool(window_shape=3, strides=2, padding="VALID"),
+        hk.Conv2D(output_channels=120, kernel_shape=5, padding="SAME"),
+        jax.nn.swish,
+        hk.MaxPool(window_shape=3, strides=2, padding="VALID"),
+        hk.Flatten(),
+        hk.Linear(84),
+        jax.nn.swish,
+        hk.Linear(num_classes),
+    ])
+    return cnn(x)
+
+  return lenet_fn_swish
+
+
 he_normal = hk.initializers.VarianceScaling(2.0, "fan_in", "truncated_normal")
 
 
@@ -294,6 +321,8 @@ def get_model(model_name, data_info, **kwargs):
   _MODEL_FNS = {
       "lenet":
           make_lenet5_fn,
+      "lenet_swish":
+          make_lenet5_fn_swish,
       "resnet20":
           make_resnet20_fn,
       "resnet20_frn":
