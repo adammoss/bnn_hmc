@@ -46,6 +46,11 @@ def nll(outputs, labels, normalized=True):
   labels = labels.astype(int)
   idx = (onp.arange(labels.size), labels)
   log_ps = onp.log(outputs[idx])
+  print(labels)
+  print(idx)
+  print(outputs)
+  print(onp.log(outputs[idx]))
+  print(-log_ps.mean())
   if normalized:
     return -log_ps.mean()
   else:
