@@ -36,7 +36,7 @@ for c in config:
     cmd_args.step_size = 1.0e-5
     cmd_args.trajectory_len = 0.1
     cmd_args.num_iterations = 50
-    cmd_args.max_num_leapfrog_steps = 10000
+    cmd_args.max_num_leapfrog_steps = 50000
     cmd_args.num_burn_in_iterations = 10
 
     for i in range(num_repeats):
