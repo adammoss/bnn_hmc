@@ -11,7 +11,7 @@ from scripts.run_hmc import train_model as train_hmc_model
 from scripts.run_hmc import get_args as get_hmc_args
 from bnn_hmc.utils import train_utils
 from bnn_hmc.utils import script_utils
-from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats
+from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats, subset_train_to
 
 print('Performing HMC')
 
@@ -25,7 +25,7 @@ for c in config:
     cmd_args.image_size = image_size
     cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.scaling = c['scaling']
-    cmd_args.subset_train_to = c['subset_train_to']
+    cmd_args.subset_train_to = subset_train_to
     cmd_args.model_name = model
     cmd_args.train_split = c['train']
     # Compute ensemble predictions directly as we don't use early stopping
@@ -33,7 +33,7 @@ for c in config:
 
     cmd_args.weight_decay = 50
     cmd_args.temperature = 1.0
-    cmd_args.step_size = 3.0e-5
+    cmd_args.step_size = 1.0e-5
     cmd_args.trajectory_len = 0.1
     cmd_args.num_iterations = 50
     cmd_args.max_num_leapfrog_steps = 10000
@@ -51,7 +51,7 @@ for c in config:
     cmd_args.image_size = image_size
     cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.scaling = c['scaling']
-    cmd_args.subset_train_to = c['subset_train_to']
+    cmd_args.subset_train_to = subset_train_to
     cmd_args.model_name = model
     cmd_args.train_split = c['train']
     cmd_args.eval_split = c['eval']

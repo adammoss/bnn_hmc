@@ -8,7 +8,7 @@ from scripts.run_sgd import train_model as train_sgd_model
 from scripts.run_sgd import get_args as get_sgd_args
 from bnn_hmc.utils import train_utils
 from bnn_hmc.utils import script_utils
-from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats
+from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats, subset_train_to
 
 print('Performing Deep Ensembles')
 
@@ -22,7 +22,7 @@ for c in config:
     cmd_args.image_size = image_size
     cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.scaling = c['scaling']
-    cmd_args.subset_train_to = c['subset_train_to']
+    cmd_args.subset_train_to = subset_train_to
     cmd_args.model_name = model
     cmd_args.train_split = c['train']
     cmd_args.test_split = c['test']
