@@ -49,7 +49,7 @@ def nll(outputs, labels, normalized=True):
   print(labels)
   print(idx)
   print(outputs)
-  print(onp.log(outputs(idx)))
+  print(onp.log(outputs[idx]))
   if normalized:
     return -log_ps.mean()
   else:
