@@ -46,20 +46,10 @@ def nll(outputs, labels, normalized=True):
   labels = labels.astype(int)
   idx = (onp.arange(labels.size), labels)
   log_ps = onp.log(outputs[idx])
-  print(labels)
-  print(idx)
-  print(outputs)
-  print(onp.log(outputs[idx]))
-  print(-log_ps.mean())
   if normalized:
     return -log_ps.mean()
   else:
     return -log_ps.sum()
-
-  #num_classes = logits.shape[-1]
-  #labels = jax.nn.one_hot(y, num_classes)
-  #softmax_xent = jnp.sum(labels * jax.nn.log_softmax(logits))
-
 
 
 def calibration_curve(outputs, labels, num_bins=20):
