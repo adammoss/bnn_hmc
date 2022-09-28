@@ -135,7 +135,6 @@ def evaluate_metrics(preds, targets, metrics_fns):
     stats = {}
     for metric_name, metric_fn in metrics_fns.items():
         stats[metric_name] = metric_fn(preds, targets)
-        print(metric_name, stats[metric_name])
 
     return stats
 
