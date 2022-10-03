@@ -199,9 +199,10 @@ def load_image_dataset(split,
     return tfds.as_numpy(ds), num_classes, num_examples
 
 
-def get_image_dataset(name, train_split="train", test_split="test", scaling=None, image_size=None, builder_kwargs={}):
+def get_image_dataset(name, train_split="train", test_split="test", scaling=None, image_size=None, builder_kwargs={},
+                      test_name=None):
     train_set, n_classes, _ = load_image_dataset(train_split, -1, name, scaling=scaling, image_size=image_size,
-                                                 builder_kwargs=builder_kwargs, test_name=None)
+                                                 builder_kwargs=builder_kwargs)
     train_set = next(iter(train_set))
 
     if test_name is None:
