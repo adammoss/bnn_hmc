@@ -69,6 +69,8 @@ def add_common_flags(parser):
     parser.add_argument(
         "--dataset_name", type=str, default="cifar10", help="Name of the dataset")
     parser.add_argument(
+        "--test_dataset_name", type=str, default="cifar10", help="Name of the test dataset")
+    parser.add_argument(
         "--subset_train_to",
         type=int,
         default=None,
