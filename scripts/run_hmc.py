@@ -79,12 +79,20 @@ def get_args():
 
 
 def get_dirname_tfwriter(cmd_args):
-    subdirname = ("model_{}_wd_{}_stepsize_{}_trajlen_{}_burnin_{}_mh_{}_temp_{}_"
-                  "seed_{}".format(cmd_args.model_name, cmd_args.weight_decay,
-                                   cmd_args.step_size, cmd_args.trajectory_len,
-                                   cmd_args.num_burn_in_iterations,
-                                   not cmd_args.no_mh, cmd_args.temperature,
-                                   cmd_args.seed))
+    if cmd_args.test_dataset_name is not None:
+        subdirname = ("model_{}_wd_{}_stepsize_{}_trajlen_{}_burnin_{}_mh_{}_temp_{}_"
+                      "seed_{}_test_{}".format(cmd_args.model_name, cmd_args.weight_decay,
+                                       cmd_args.step_size, cmd_args.trajectory_len,
+                                       cmd_args.num_burn_in_iterations,
+                                       not cmd_args.no_mh, cmd_args.temperature,
+                                       cmd_args.seed, cmd_args.test_dataset_name))
+    else:
+        subdirname = ("model_{}_wd_{}_stepsize_{}_trajlen_{}_burnin_{}_mh_{}_temp_{}_"
+                      "seed_{}".format(cmd_args.model_name, cmd_args.weight_decay,
+                                       cmd_args.step_size, cmd_args.trajectory_len,
+                                       cmd_args.num_burn_in_iterations,
+                                       not cmd_args.no_mh, cmd_args.temperature,
+                                       cmd_args.seed))
     dirname, tf_writer = script_utils.prepare_logging(subdirname, cmd_args)
     return dirname, tf_writer
 
