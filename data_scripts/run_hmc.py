@@ -42,7 +42,7 @@ for c in config:
     for ood in c['ood']:
         for i in range(num_repeats):
             cmd_args.seed = i
-            cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
+            cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
             cmd_args.test_dataset_name = ood['dataset']
             cmd_args.test_builder_kwargs = ood['builder_kwargs']
             train_hmc_model(cmd_args)
