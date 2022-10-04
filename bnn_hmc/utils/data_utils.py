@@ -200,17 +200,25 @@ def load_image_dataset(split,
 
 
 def get_image_dataset(name, train_split="train", test_split="test", scaling=None, image_size=None, builder_kwargs={},
-                      test_name=None):
+                      test_name=None, test_builder_kwargs={}):
     train_set, n_classes, _ = load_image_dataset(train_split, -1, name, scaling=scaling, image_size=image_size,
                                                  builder_kwargs=builder_kwargs)
     train_set = next(iter(train_set))
 
     if test_name is None:
-        test_set, _, _ = load_image_dataset(test_split, -1, name, scaling=scaling, image_size=image_size,
-                                            builder_kwargs=builder_kwargs)
+        if test_builder_kwargs is None:
+            test_set, _, _ = load_image_dataset(test_split, -1, name, scaling=scaling, image_size=image_size,
+                                                builder_kwargs=builder_kwargs)
+        else:
+            test_set, _, _ = load_image_dataset(test_split, -1, name, scaling=scaling, image_size=image_size,
+                                                builder_kwargs=test_builder_kwargs)
     else:
-        test_set, _, _ = load_image_dataset(test_split, -1, test_name, scaling=scaling, image_size=image_size,
-                                            builder_kwargs=builder_kwargs)
+        if test_builder_kwargs is None:
+            test_set, _, _ = load_image_dataset(test_split, -1, test_name, scaling=scaling, image_size=image_size,
+                                                builder_kwargs=builder_kwargs)
+        else:
+            test_set, _, _ = load_image_dataset(test_split, -1, test_name, scaling=scaling, image_size=image_size,
+                                                builder_kwargs=test_builder_kwargs)
     test_set = next(iter(test_set))
 
     data_info = {"num_classes": n_classes}
@@ -306,20 +314,22 @@ def pmap_dataset(ds, n_devices):
 
 
 def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_split="train", test_split="test",
-                           scaling=None, image_size=None, builder_kwargs={}, test_name=None):
+                           scaling=None, image_size=None, builder_kwargs={}, test_name=None, test_builder_kwargs={}):
     """Make train and test sets sharded over batch dim."""
     # name = name.lower()
     n_devices = n_devices or len(jax.local_devices())
     if name in ImgDatasets._value2member_map_:
         train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split,
                                                            scaling=scaling, image_size=image_size,
-                                                           builder_kwargs=builder_kwargs, test_name=test_name)
+                                                           builder_kwargs=builder_kwargs, test_name=test_name,
+                                                           test_builder_kwargs=test_builder_kwargs)
         loaded = True
         task = Task.CLASSIFICATION
     elif name in ImgRegDatasets._value2member_map_:
         train_set, test_set, data_info = get_image_dataset(name, train_split=train_split, test_split=test_split,
                                                            scaling=scaling, image_size=image_size,
-                                                           builder_kwargs=builder_kwargs, test_name=test_name)
+                                                           builder_kwargs=builder_kwargs, test_name=test_name,
+                                                           test_builder_kwargs=test_builder_kwargs)
         loaded = True
         task = Task.REGRESSION
     elif name == "imdb":

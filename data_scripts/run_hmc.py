@@ -39,6 +39,14 @@ for c in config:
     cmd_args.max_num_leapfrog_steps = 50000
     cmd_args.num_burn_in_iterations = 10
 
+    for ood in c['ood']:
+        for i in range(num_repeats):
+            cmd_args.seed = i
+            cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
+            cmd_args.test_dataset_name = ood['dataset']
+            cmd_args.test_builder_kwargs = ood['builder_kwargs']
+            train_hmc_model(cmd_args)
+
     for i in range(num_repeats):
         cmd_args.eval_split = None
         cmd_args.seed = i

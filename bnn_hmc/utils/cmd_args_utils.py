@@ -118,6 +118,11 @@ def add_common_flags(parser):
         default=None,
         help="Optional dataset builder keyword arguments")
     parser.add_argument(
+        "--test_builder_kwargs",
+        type=str,
+        default=None,
+        help="Optional dataset test builder keyword arguments")
+    parser.add_argument(
         "--image_size",
         type=int,
         default=None,

@@ -6,6 +6,22 @@ subset_train_to = 5000
 
 config = [
     {
+        'dataset': 'cmd',
+        'train': 'train[:90%]',
+        'test': 'train[90%:95%]',
+        'eval': 'train[95%:]',
+        'batch_size': 100,
+        'scaling': 'asinh',
+        'builder_kwargs': '{"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]}',
+        'ood': [{
+            'dataset': 'cmd',
+            'eval': 'train[95%:]',
+            'builder_kwargs': '{"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]}',
+        }],
+        'optimizer': 'SGD',
+        'step_size': 1e-7,
+    },
+    {
         'dataset': 'mirabest/confident',
         'train': 'train[:80%]',
         'test': 'train[80%:]',
@@ -33,22 +49,6 @@ config = [
         'ood': [],
         'optimizer': 'SGD',
         'step_size': 3e-7,
-    },
-    {
-        'dataset': 'cmd',
-        'train': 'train[:90%]',
-        'test': 'train[90%:95%]',
-        'eval': 'train[95%:]',
-        'batch_size': 100,
-        'scaling': 'asinh',
-        'builder_kwargs': '{"simulation": "IllustrisTNG", "field": "Mtot", "parameters": ["omegam"]}',
-        'ood': [{
-            'dataset': 'cmd',
-            'eval': 'train[95%:]',
-            'builder_kwargs': '{"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]}',
-        }],
-        'optimizer': 'SGD',
-        'step_size': 1e-7,
     },
     {
         'dataset': 'mlsst/Y10',
