@@ -75,7 +75,7 @@ def get_data_model_fns(args):
     if args.test_builder_kwargs is not None:
         test_builder_kwargs = ast.literal_eval(args.test_builder_kwargs)
     else:
-        test_builder_kwargs = {}
+        test_builder_kwargs = builder_kwargs
     if args.eval_split is None:
         train_set, test_set, task, data_info = data_utils.make_ds_pmap_fullbatch(
             args.dataset_name, dtype, truncate_to=args.subset_train_to, train_split=args.train_split,
