@@ -223,6 +223,24 @@ def make_resnet20_frn_fn(data_info, activation=jax.nn.relu):
       activation=activation)
 
 
+def make_resnet14_frn_fn(data_info, activation=jax.nn.relu):
+  num_classes = data_info["num_classes"]
+  return make_resnet_fn(
+      num_classes,
+      depth=14,
+      normalization_layer=FeatureResponseNorm,
+      activation=activation)
+
+
+def make_resnet8_frn_fn(data_info, activation=jax.nn.relu):
+  num_classes = data_info["num_classes"]
+  return make_resnet_fn(
+      num_classes,
+      depth=8,
+      normalization_layer=FeatureResponseNorm,
+      activation=activation)
+
+
 def make_cnn_lstm(data_info,
                   max_features=20000,
                   embedding_size=128,
@@ -329,6 +347,10 @@ def get_model(model_name, data_info, **kwargs):
           make_resnet20_frn_fn,
       "resnet20_frn_swish":
           functools.partial(make_resnet20_frn_fn, activation=jax.nn.swish),
+      "resnet8_frn_swish":
+          functools.partial(make_resnet8_frn_fn, activation=jax.nn.swish),
+      "resnet14_frn_swish":
+          functools.partial(make_resnet14_frn_fn, activation=jax.nn.swish),
       "cnn_lstm":
           make_cnn_lstm,
       "smooth_cnn_lstm":
