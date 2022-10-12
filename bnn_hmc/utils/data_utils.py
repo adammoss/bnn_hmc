@@ -200,7 +200,7 @@ def load_image_dataset(split,
 
 
 def get_image_dataset(name, train_split="train", test_split="test", scaling=None, image_size=None, builder_kwargs={},
-                      test_name=None, test_builder_kwargs={}):
+                      test_name=None, test_builder_kwargs=None):
     train_set, n_classes, _ = load_image_dataset(train_split, -1, name, scaling=scaling, image_size=image_size,
                                                  builder_kwargs=builder_kwargs)
     train_set = next(iter(train_set))
@@ -314,7 +314,7 @@ def pmap_dataset(ds, n_devices):
 
 
 def make_ds_pmap_fullbatch(name, dtype, n_devices=None, truncate_to=None, train_split="train", test_split="test",
-                           scaling=None, image_size=None, builder_kwargs={}, test_name=None, test_builder_kwargs={}):
+                           scaling=None, image_size=None, builder_kwargs={}, test_name=None, test_builder_kwargs=None):
     """Make train and test sets sharded over batch dim."""
     # name = name.lower()
     n_devices = n_devices or len(jax.local_devices())
