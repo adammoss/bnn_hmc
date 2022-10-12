@@ -51,6 +51,8 @@ for c in config:
         cmd_args.eval_split = None
         cmd_args.seed = i
         cmd_args.dir = 'runs/hmc/%s/%s/' % (c['dataset'], i)
+        #cmd_args.test_dataset_name = None
+        #cmd_args.test_builder_kwargs = None
         train_hmc_model(cmd_args)
 
     cmd_args = get_visualization_args()

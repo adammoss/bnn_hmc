@@ -123,6 +123,7 @@ def load_params(path):
 
 
 def run_visualization(args):
+    print(args)
     subdirname = "posterior_visualization"
     dirname = os.path.join(args.dir, subdirname)
     os.makedirs(dirname, exist_ok=True)
@@ -133,6 +134,7 @@ def run_visualization(args):
         builder_kwargs = ast.literal_eval(args.builder_kwargs)
     else:
         builder_kwargs = {}
+    print(builder_kwargs)
     train_set, test_set, task, data_info = data_utils.make_ds_pmap_fullbatch(
         args.dataset_name, dtype, truncate_to=args.subset_train_to, train_split=args.train_split,
         test_split=args.eval_split, scaling=args.scaling, image_size=args.image_size,
