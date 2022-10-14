@@ -325,7 +325,7 @@ def make_mlp_regression_small(data_info):
   return make_mlp([50], 2)
 
 
-def make_mlp_classification(data_info, layer_dims=[256, 256]):
+def make_mlp_classification(data_info, layer_dims=[100, 100]):
   num_classes = data_info["num_classes"]
   return make_mlp(layer_dims, num_classes)
 
@@ -347,10 +347,10 @@ def get_model(model_name, data_info, **kwargs):
           make_resnet20_frn_fn,
       "resnet20_frn_swish":
           functools.partial(make_resnet20_frn_fn, activation=jax.nn.swish),
-      "resnet8_frn_swish":
-          functools.partial(make_resnet8_frn_fn, activation=jax.nn.swish),
       "resnet14_frn_swish":
           functools.partial(make_resnet14_frn_fn, activation=jax.nn.swish),
+      "resnet8_frn_swish":
+          functools.partial(make_resnet8_frn_fn, activation=jax.nn.swish),
       "cnn_lstm":
           make_cnn_lstm,
       "smooth_cnn_lstm":
