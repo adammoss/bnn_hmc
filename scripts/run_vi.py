@@ -249,12 +249,14 @@ def train_model(args):
                                                       test_set[1], metrics_fns)
         if args.output_prefix is not None:
             onp.save(os.path.join(dirname, args.output_prefix + '_predictions.npy'), all_preds)
+            onp.save(os.path.join(dirname, args.output_prefix + '_ensemble_prediction.npy'), ensemble_predictions)
             onp.save(os.path.join(dirname, args.output_prefix + '_test_set.npy'), test_set[1])
-            onp.save(os.path.join(dirname, args.output_prefix + '_metrics.npy'), ensemble_stats)
+            onp.save(os.path.join(dirname, args.output_prefix + '_ensemble_metrics.npy'), ensemble_stats)
         else:
             onp.save(os.path.join(dirname, 'predictions.npy'), all_preds)
+            onp.save(os.path.join(dirname, 'ensemble_prediction.npy'), ensemble_predictions)
             onp.save(os.path.join(dirname, 'test_set.npy'), test_set[1])
-            onp.save(os.path.join(dirname, 'metrics.npy'), ensemble_stats)
+            onp.save(os.path.join(dirname, 'ensemble_metrics.npy'), ensemble_stats)
         print(ensemble_stats)
 
 

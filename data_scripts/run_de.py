@@ -47,3 +47,14 @@ for c in config:
             train_sgd_model(cmd_args)
         cmd_args.ensemble_root = 'runs/sgd/%s/%s/*/*' % (c['dataset'], i)
         train_sgd_model(cmd_args)
+
+    for ood in c['ood']:
+        cmd_args.dataset_name = ood['dataset']
+        cmd_args.builder_kwargs = ood['builder_kwargs']
+        cmd_args.eval_split = ood['eval']
+        output_prefix = 'ood_%s_%s' % (ood['dataset'], ood['eval'])
+        cmd_args.output_prefix = output_prefix.replace('/', '_')
+        for i in range(num_repeats):
+            cmd_args.ensemble_root = 'runs/sgd/%s/%s/*/*' % (c['dataset'], i)
+            cmd_args.dir = 'runs/vi/%s/%s/' % (c['dataset'], i)
+            train_sgd_model(cmd_args)
