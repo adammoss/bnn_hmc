@@ -1,8 +1,7 @@
-model = 'lenet'
-num_repeats = 3
+num_repeats = 1
 num_ensemble_repeats = 5
 image_size = 64
-subset_train_to = 5000
+subset_train_to = 20000
 
 config = [
     {
@@ -20,6 +19,7 @@ config = [
         }],
         'optimizer': 'SGD',
         'step_size': 3e-7,
+        'model': 'lenet',
     },
     {
         'dataset': 'slc/space',
@@ -33,6 +33,7 @@ config = [
         'ood': [],
         'optimizer': 'SGD',
         'step_size': 3e-7,
+        'model': 'lenet',
     },
     {
         'dataset': 'cmd',
@@ -49,6 +50,7 @@ config = [
         }],
         'optimizer': 'SGD',
         'step_size': 1e-7,
+        'model': 'lenet',
     },
     {
         'dataset': 'mlsst/Y10',
@@ -65,5 +67,6 @@ config = [
         }],
         'optimizer': 'SGD',
         'step_size': 3e-7,
+        'model': 'lenet',
     },
 ]
