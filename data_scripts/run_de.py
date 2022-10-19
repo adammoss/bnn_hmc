@@ -49,7 +49,6 @@ for c in config:
         train_sgd_model(cmd_args)
 
     for ood in c['ood']:
-        cmd_args.ensemble_root = None
         cmd_args.dataset_name = ood['dataset']
         cmd_args.builder_kwargs = ood['builder_kwargs']
         cmd_args.eval_split = ood['eval']
