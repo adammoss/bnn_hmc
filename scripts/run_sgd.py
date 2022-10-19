@@ -180,16 +180,26 @@ def train_model(args):
             ensemble_predictions = None
             ensemble_stats = None
             for i, root in enumerate(glob.glob(args.ensemble_root)):
-                if not os.path.isfile(root + '/metrics.npy'):
-                    continue
-                metrics = onp.load(root + '/metrics.npy', allow_pickle=True)
-                print(i, metrics)
+                if args.output_prefix is not None:
+                    if not os.path.isfile(root + '/' + args.output_prefix + '_metrics.npy'):
+                        continue
+                else:
+                    if not os.path.isfile(root + '/metrics.npy'):
+                        continue
+                if args.output_prefix is not None:
+                    metrics = onp.load(root + '/' + args.output_prefix + '_metrics.npy', allow_pickle=True)
+                else:
+                    metrics = onp.load(root + '/metrics.npy', allow_pickle=True)
+                print(i, root, metrics)
                 if args.ensemble_exclude_metric is not None and \
                         (not onp.isfinite(metrics.item()[args.ensemble_exclude_metric]) or
                          metrics.item()[args.ensemble_exclude_metric] > args.ensemble_exclude_value):
                     # Do not include any runs which have diverged
                     continue
-                test_predictions = onp.load(root + '/predictions.npy')
+                if args.output_prefix is not None:
+                    test_predictions = onp.load(root + '/' + args.output_prefix + '_predictions.npy')
+                else:
+                    test_predictions = onp.load(root + '/predictions.npy')
                 ensemble_predictions = ensemble_upd_fn(ensemble_predictions,
                                                        num_ensembled, test_predictions)
                 ensemble_stats = train_utils.evaluate_metrics(ensemble_predictions,
