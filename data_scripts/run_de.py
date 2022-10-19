@@ -57,6 +57,7 @@ for c in config:
         for i in range(num_repeats):
             cmd_args.ensemble_root = None
             for j in range(num_ensemble_repeats):
+                cmd_args.seed = i * num_ensemble_repeats + j
                 cmd_args.dir = 'runs/sgd/%s/%s/%s/' % (c['dataset'], i, j)
                 train_sgd_model(cmd_args)
             cmd_args.ensemble_root = 'runs/sgd/%s/%s/*/*' % (c['dataset'], i)
