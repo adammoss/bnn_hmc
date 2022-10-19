@@ -11,7 +11,7 @@ from scripts.run_hmc import train_model as train_hmc_model
 from scripts.run_hmc import get_args as get_hmc_args
 from bnn_hmc.utils import train_utils
 from bnn_hmc.utils import script_utils
-from data_scripts.data_config import config, model, image_size, num_repeats, num_ensemble_repeats, subset_train_to
+from data_scripts.data_config import config, image_size, num_repeats, num_ensemble_repeats, subset_train_to
 
 print('Performing HMC')
 
@@ -26,7 +26,7 @@ for c in config:
     cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.scaling = c['scaling']
     cmd_args.subset_train_to = subset_train_to
-    cmd_args.model_name = model
+    cmd_args.model_name = c['model']
     cmd_args.train_split = c['train']
     # Compute ensemble predictions directly as we don't use early stopping
     cmd_args.test_split = c['eval']
@@ -62,7 +62,7 @@ for c in config:
     cmd_args.builder_kwargs = c['builder_kwargs']
     cmd_args.scaling = c['scaling']
     cmd_args.subset_train_to = subset_train_to
-    cmd_args.model_name = model
+    cmd_args.model_name = c['model']
     cmd_args.train_split = c['train']
     cmd_args.eval_split = c['eval']
 

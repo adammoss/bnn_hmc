@@ -1,4 +1,3 @@
-model = 'lenet'
 num_repeats = 1
 num_ensemble_repeats = 5
 image_size = 64
@@ -20,6 +19,24 @@ config = [
         }],
         'optimizer': 'SGD',
         'step_size': 3e-7,
+        'model': 'lenet',
+    },
+    {
+        'dataset': 'mirabest/confident',
+        'train': 'train[:80%]',
+        'test': 'train[80%:]',
+        'eval': 'test',
+        'batch_size': 53,
+        'scaling': None,
+        'builder_kwargs': None,
+        'ood': [{
+            'dataset': 'mirabest/uncertain',
+            'eval': 'test',
+            'builder_kwargs': None,
+        }],
+        'optimizer': 'SGD',
+        'step_size': 3e-7,
+        'model': 'resnet20_frn_swish',
     },
     {
         'dataset': 'cmd',
@@ -36,6 +53,7 @@ config = [
         }],
         'optimizer': 'SGD',
         'step_size': 1e-7,
+        'model': 'lenet',
     },
     {
         'dataset': 'slc/space',
@@ -49,6 +67,7 @@ config = [
         'ood': [],
         'optimizer': 'SGD',
         'step_size': 3e-7,
+        'model': 'lenet',
     },
     {
         'dataset': 'mlsst/Y10',
@@ -65,5 +84,6 @@ config = [
         }],
         'optimizer': 'Adam',
         'step_size': 1e-5,
+        'model': 'lenet',
     },
 ]
