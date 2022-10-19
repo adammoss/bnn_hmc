@@ -22,23 +22,6 @@ config = [
         'model': 'lenet',
     },
     {
-        'dataset': 'mirabest/confident',
-        'train': 'train[:80%]',
-        'test': 'train[80%:]',
-        'eval': 'test',
-        'batch_size': 53,
-        'scaling': None,
-        'builder_kwargs': None,
-        'ood': [{
-            'dataset': 'mirabest/uncertain',
-            'eval': 'test',
-            'builder_kwargs': None,
-        }],
-        'optimizer': 'SGD',
-        'step_size': 3e-7,
-        'model': 'resnet20_frn_swish',
-    },
-    {
         'dataset': 'cmd',
         'train': 'train[:90%]',
         'test': 'train[90%:95%]',
