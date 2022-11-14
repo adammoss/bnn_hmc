@@ -180,6 +180,7 @@ def train_model(args):
         # Train
         for iteration in range(start_iteration, args.num_epochs):
             save_model = False
+            best_model = False
 
             (params, net_state, opt_state, elbo_avg, key), iteration_time = (
                 sgd_train_epoch(params, net_state, opt_state, train_set, key))
@@ -204,6 +205,7 @@ def train_model(args):
                     best_nll = ensemble_stats['nll']
                     best_iteration = iteration
                     save_model = True
+                    best_model = True
 
             if args.patience is not None and iteration > best_iteration + args.patience:
                 break
@@ -214,7 +216,7 @@ def train_model(args):
 
             # Save checkpoint
             if save_model:
-                checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration)
+                checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration, best=best_model)
                 checkpoint_path = os.path.join(dirname, checkpoint_name)
                 checkpoint_dict = checkpoint_utils.make_sgd_checkpoint_dict(
                     iteration, params, net_state, opt_state, key)
