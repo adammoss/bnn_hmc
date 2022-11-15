@@ -134,7 +134,7 @@ def get_initialization_dict(dirname, args, init_dict, best=False):
     checkpoints, all variables are loaded from `init_dict`.
 
     """
-    print("Attempting checkpoint at %s" % dirname)
+    print("Attempting checkpoint at %s" % dirname, best)
     checkpoint_dict, status = checkpoint_utils.initialize(dirname,
                                                           args.init_checkpoint, best=best)
     if status == checkpoint_utils.InitStatus.LOADED_PREEMPTED:
