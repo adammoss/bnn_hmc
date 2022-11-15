@@ -81,14 +81,15 @@ def make_checkpoint_name(step, best=False):
         return _CHECKPOINT_FORMAT_STRING.format(step)
 
 
-def initialize(dirname, init_checkpoint):
+def initialize(dirname, init_checkpoint, best=False):
     checkpoints = filter(name_is_checkpoint, os.listdir(dirname))
     checkpoints = list(checkpoints)
     if checkpoints:
         checkpoint_iteration = map(parse_checkpoint_name, checkpoints)
         start_iteration = max(checkpoint_iteration)
         start_checkpoint_path = (
-            os.path.join(dirname, make_checkpoint_name(start_iteration)))
+            os.path.join(dirname, make_checkpoint_name(start_iteration, best=best)))
+        print("Using checkpoint %s" % start_checkpoint_path)
         checkpoint_dict = load_checkpoint(start_checkpoint_path)
         checkpoint_dict["filename_iteration"] = start_iteration
         return checkpoint_dict, InitStatus.LOADED_PREEMPTED
