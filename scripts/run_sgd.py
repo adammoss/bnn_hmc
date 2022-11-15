@@ -109,7 +109,7 @@ def train_model(args):
     key = jax.random.split(key, num_devices)
     init_dict = checkpoint_utils.make_sgd_checkpoint_dict(-1, params, net_state,
                                                           opt_state, key)
-    init_dict = script_utils.get_initialization_dict(dirname, args, init_dict)
+    init_dict = script_utils.get_initialization_dict(dirname, args, init_dict, best=args.eval_split is not None)
     start_iteration, params, net_state, opt_state, key = (
         checkpoint_utils.parse_sgd_checkpoint_dict(init_dict))
     start_iteration += 1
@@ -153,7 +153,13 @@ def train_model(args):
                 save_model = True
 
             if save_model:
-                checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration, best=best_model)
+                checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration)
+                checkpoint_path = os.path.join(dirname, checkpoint_name)
+                checkpoint_dict = checkpoint_utils.make_sgd_checkpoint_dict(
+                    iteration, params, net_state, opt_state, key)
+                checkpoint_utils.save_checkpoint(checkpoint_path, checkpoint_dict)
+            if best_model:
+                checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration, best=True)
                 checkpoint_path = os.path.join(dirname, checkpoint_name)
                 checkpoint_dict = checkpoint_utils.make_sgd_checkpoint_dict(
                     iteration, params, net_state, opt_state, key)
