@@ -201,8 +201,8 @@ def train_model(args):
                     vi_ensemble_predict_fn(net_apply, params, net_state, test_set))
                 ensemble_stats = train_utils.evaluate_metrics(ensemble_predictions,
                                                               test_set[1], metrics_fns)
-                if ensemble_stats['nll'] < best_nll:
-                    best_nll = ensemble_stats['nll']
+                if ensemble_stats['ens_nll'] < best_nll:
+                    best_nll = ensemble_stats['ens_nll']
                     best_iteration = iteration
                     save_model = True
                     best_model = True
