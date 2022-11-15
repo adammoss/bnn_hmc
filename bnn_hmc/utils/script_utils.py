@@ -118,7 +118,7 @@ def get_num_batches_total_steps(args, train_set):
     return num_batches, total_steps
 
 
-def get_initialization_dict(dirname, args, init_dict):
+def get_initialization_dict(dirname, args, init_dict, best=False):
     """Loads checkpoint if available.
 
     This function is used in training scripts to initialize variables, it handles
@@ -136,7 +136,7 @@ def get_initialization_dict(dirname, args, init_dict):
     """
     print("Attempting checkpoint at %s" % dirname)
     checkpoint_dict, status = checkpoint_utils.initialize(dirname,
-                                                          args.init_checkpoint)
+                                                          args.init_checkpoint, best=best)
     if status == checkpoint_utils.InitStatus.LOADED_PREEMPTED:
         print("Continuing the run from the last saved checkpoint")
         return checkpoint_dict
