@@ -164,9 +164,9 @@ def run_visualization(args):
     params2 = load_params(args.checkpoint2)
     params3 = load_params(args.checkpoint3)
 
-    # for params in [params1, params2, params3]:
-    #   print(jax.pmap(eval, axis_name='i', in_axes=(None, None, 0))
-    #         (params, net_state, train_set))
+    for params in [params1, params2, params3]:
+        print(jax.pmap(eval, axis_name='i', in_axes=(None, None, 0))
+              (params, net_state, train_set))
 
     u_vec, u_norm, v_vec, v_norm, origin = get_u_v_o(params1, params2, params3)
 
