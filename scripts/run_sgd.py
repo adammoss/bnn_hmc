@@ -152,6 +152,7 @@ def train_model(args):
                     best_nll = test_stats['nll']
                     best_iteration = iteration
                     save_model = True
+                    best_model = True
 
             if args.patience is not None and iteration > best_iteration + args.patience:
                 break
@@ -159,7 +160,6 @@ def train_model(args):
             # Save checkpoint
             if args.patience is None and (iteration % args.save_freq == 0 or iteration == args.num_epochs - 1):
                 save_model = True
-                best_model = True
 
             if save_model:
                 checkpoint_name = checkpoint_utils.make_checkpoint_name(iteration)
