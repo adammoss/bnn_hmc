@@ -1,4 +1,4 @@
-num_repeats = 1
+num_repeats = 3
 num_ensemble_repeats = 5
 image_size = 64
 subset_train_to = 20000
