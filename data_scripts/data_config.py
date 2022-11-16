@@ -35,7 +35,7 @@ config = [
             'builder_kwargs': '{"simulation": "SIMBA", "field": "Mtot", "parameters": ["omegam"]}',
         }],
         'optimizer': 'SGD',
-        'step_size': 1e-7,
+        'step_size': 1e-8,
         'model': 'lenet',
     },
     {
