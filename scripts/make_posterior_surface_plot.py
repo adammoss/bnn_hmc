@@ -146,6 +146,7 @@ def run_visualization(args):
     params2 = load_params(args.checkpoint2)
     params3 = load_params(args.checkpoint3)
 
+    print('Log likes:')
     for params in [params1, params2, params3]:
         print(jax.pmap(eval, axis_name='i', in_axes=(None, None, 0))
               (params, net_state, train_set))
