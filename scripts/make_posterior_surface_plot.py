@@ -140,7 +140,12 @@ def run_visualization(args):
         prior = log_prior_fn(params)
         likelihood = jax.lax.psum(likelihood, axis_name="i")
         log_prob = likelihood + prior
-        return log_prob, likelihood, prior
+
+        net_state, test_predictions = onp.asarray(
+            predict_fn(net_apply, params, net_state, test_set))
+        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                                  metrics_fns)
+        return log_prob, likelihood, prior, test_stats
 
     params1 = load_params(args.checkpoint1)
     params2 = load_params(args.checkpoint2)
