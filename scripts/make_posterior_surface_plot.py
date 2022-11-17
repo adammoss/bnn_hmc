@@ -142,10 +142,10 @@ def run_visualization(args):
         log_prob = likelihood + prior
 
         net_state, test_predictions = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set))
-        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-                                                  metrics_fns)
-        return log_prob, likelihood, prior, test_stats
+            predict_fn(net_apply, params, net_state, dataset))
+        #test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+        #                                          metrics_fns)
+        return log_prob, likelihood, prior
 
     params1 = load_params(args.checkpoint1)
     params2 = load_params(args.checkpoint2)
