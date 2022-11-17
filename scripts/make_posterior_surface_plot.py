@@ -129,28 +129,10 @@ def run_visualization(args):
     os.makedirs(dirname, exist_ok=True)
     cmd_args_utils.save_cmd(dirname, None)
 
-    dtype = jnp.float64 if args.use_float64 else jnp.float32
-    if args.builder_kwargs is not None:
-        builder_kwargs = ast.literal_eval(args.builder_kwargs)
-    else:
-        builder_kwargs = {}
-    print(builder_kwargs)
-    train_set, test_set, task, data_info = data_utils.make_ds_pmap_fullbatch(
-        args.dataset_name, dtype, truncate_to=args.subset_train_to, train_split=args.train_split,
-        test_split=args.eval_split, scaling=args.scaling, image_size=args.image_size,
-        builder_kwargs=builder_kwargs)
-
-    net_apply, net_init = models.get_model(args.model_name, data_info)
-    net_apply = precision_utils.rewrite_high_precision(net_apply)
-    init_data = jax.tree_map(lambda elem: elem[0][:1], train_set)
-    net_init_key = jax.random.PRNGKey(0)
-    params, net_state = net_init(net_init_key, init_data, True)
-
-    (likelihood_factory, predict_fn, ensemble_upd_fn, metrics_fns,
-     tabulate_metrics) = train_utils.get_task_specific_fns(task, data_info)
-    log_likelihood_fn = likelihood_factory(args.temperature)
-    log_prior_fn, log_prior_diff_fn = losses.make_gaussian_log_prior(
-        args.weight_decay, args.temperature)
+    # Initialize data, model, losses and metrics
+    (train_set, test_set, net_apply, params, net_state, key, log_likelihood_fn,
+     log_prior_fn, _, predict_fn, ensemble_upd_fn, metrics_fns,
+     tabulate_metrics) = script_utils.get_data_model_fns(args)
 
     def eval(params, net_state, dataset):
         likelihood, _ = log_likelihood_fn(net_apply, params, net_state, dataset,
