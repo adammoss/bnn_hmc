@@ -135,7 +135,7 @@ def run_visualization(args):
      tabulate_metrics) = script_utils.get_data_model_fns(args)
 
     #likelihood, _ = log_likelihood_fn(net_apply, params, net_state, test_set,
-                                      True)
+    #                                  True)
     #print(likelihood)
 
     def eval(params, net_state, dataset):
