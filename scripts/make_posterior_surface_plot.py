@@ -134,9 +134,9 @@ def run_visualization(args):
      log_prior_fn, _, predict_fn, ensemble_upd_fn, metrics_fns,
      tabulate_metrics) = script_utils.get_data_model_fns(args)
 
-    likelihood, _ = log_likelihood_fn(net_apply, params, net_state, test_set,
+    #likelihood, _ = log_likelihood_fn(net_apply, params, net_state, test_set,
                                       True)
-    print(likelihood)
+    #print(likelihood)
 
     def eval(params, net_state, dataset):
         likelihood, _ = log_likelihood_fn(net_apply, params, net_state, dataset,
@@ -163,13 +163,13 @@ def run_visualization(args):
                                              metrics_fns)
         print(stats)
 
-        likelihood, _ = log_likelihood_fn(net_apply, params, net_state, train_set,
-                                          True)
-        print(likelihood)
+        #likelihood, _ = log_likelihood_fn(net_apply, params, net_state, train_set,
+        #                                  True)
+        #print(likelihood)
 
-        likelihood, _ = log_likelihood_fn(net_apply, params, net_state, test_set,
-                                          True)
-        print(likelihood)
+        #likelihood, _ = log_likelihood_fn(net_apply, params, net_state, test_set,
+        #                                  True)
+        #print(likelihood)
 
 
     print('Log likes:')
