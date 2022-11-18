@@ -134,6 +134,9 @@ def run_visualization(args):
      log_prior_fn, _, predict_fn, ensemble_upd_fn, metrics_fns,
      tabulate_metrics) = script_utils.get_data_model_fns(args)
 
+    net_state, test_predictions = onp.asarray(
+        predict_fn(net_apply, params, net_state, test_set))
+
     def eval(params, net_state, dataset):
         likelihood, _ = log_likelihood_fn(net_apply, params, net_state, dataset,
                                           True)
