@@ -155,10 +155,10 @@ def run_visualization(args):
 
     for params in [params1, params2, params3]:
         net_state, test_predictions = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set))
-        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+            predict_fn(net_apply, params, net_state, train_set))
+        stats = train_utils.evaluate_metrics(test_predictions, train_set[1],
                                                   metrics_fns)
-        print(test_stats)
+        print(stats)
 
     print('Log likes:')
     for params in [params1, params2, params3]:
