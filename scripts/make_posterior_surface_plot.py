@@ -153,11 +153,12 @@ def run_visualization(args):
     params2 = load_params(args.checkpoint2)
     params3 = load_params(args.checkpoint3)
 
-    net_state, test_predictions = onp.asarray(
-        predict_fn(net_apply, params1, net_state, test_set))
-    test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-                                              metrics_fns)
-    print(test_stats)
+    for params in [params1, params2, params3]:
+        net_state, test_predictions = onp.asarray(
+            predict_fn(net_apply, params, net_state, test_set))
+        test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                                  metrics_fns)
+        print(test_stats)
 
     print('Log likes:')
     for params in [params1, params2, params3]:
