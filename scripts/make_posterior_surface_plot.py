@@ -136,10 +136,8 @@ def run_visualization(args):
 
     net_state, test_predictions = onp.asarray(
         predict_fn(net_apply, params, net_state, test_set))
-
     test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
                                               metrics_fns)
-
     print(test_stats)
 
     def eval(params, net_state, dataset):
@@ -149,15 +147,17 @@ def run_visualization(args):
         likelihood = jax.lax.psum(likelihood, axis_name="i")
         log_prob = likelihood + prior
 
-        net_state, test_predictions = onp.asarray(
-            predict_fn(net_apply, params, net_state, test_set))
-        #test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-        #                                          metrics_fns)
         return log_prob, likelihood, prior
 
     params1 = load_params(args.checkpoint1)
     params2 = load_params(args.checkpoint2)
     params3 = load_params(args.checkpoint3)
+
+    net_state, test_predictions = onp.asarray(
+        predict_fn(net_apply, params1, net_state, test_set))
+    test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                              metrics_fns)
+    print(test_stats)
 
     print('Log likes:')
     for params in [params1, params2, params3]:
