@@ -134,12 +134,6 @@ def run_visualization(args):
      log_prior_fn, _, predict_fn, ensemble_upd_fn, metrics_fns,
      tabulate_metrics) = script_utils.get_data_model_fns(args)
 
-    net_state, test_predictions = onp.asarray(
-        predict_fn(net_apply, params, net_state, test_set))
-    test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
-                                              metrics_fns)
-    print(test_stats)
-
     def eval(params, net_state, dataset):
         likelihood, _ = log_likelihood_fn(net_apply, params, net_state, dataset,
                                           True)
@@ -158,6 +152,11 @@ def run_visualization(args):
             predict_fn(net_apply, params, net_state, train_set))
         stats = train_utils.evaluate_metrics(test_predictions, train_set[1],
                                                   metrics_fns)
+        print(stats)
+        net_state, test_predictions = onp.asarray(
+            predict_fn(net_apply, params, net_state, test_set))
+        stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                             metrics_fns)
         print(stats)
 
     print('Log likes:')
