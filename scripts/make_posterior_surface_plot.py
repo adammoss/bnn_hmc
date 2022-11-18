@@ -137,6 +137,11 @@ def run_visualization(args):
     net_state, test_predictions = onp.asarray(
         predict_fn(net_apply, params, net_state, test_set))
 
+    test_stats = train_utils.evaluate_metrics(test_predictions, test_set[1],
+                                              metrics_fns)
+
+    print(test_stats)
+
     def eval(params, net_state, dataset):
         likelihood, _ = log_likelihood_fn(net_apply, params, net_state, dataset,
                                           True)
